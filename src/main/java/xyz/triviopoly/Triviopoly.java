@@ -7,7 +7,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import xyz.triviopoly.view.game.GamePanel;
-import xyz.triviopoly.view.opening.OpeningPanel;
 
 public class Triviopoly {
 	private JFrame window;
@@ -21,7 +20,8 @@ public class Triviopoly {
 		window.setResizable(false);
 		window.setBackground(Color.WHITE);
 
-		mainPanel = new OpeningPanel(this);
+		// mainPanel = new OpeningPanel(this);
+		mainPanel = new GamePanel();
 		window.add(mainPanel);
 
 		window.setVisible(true);

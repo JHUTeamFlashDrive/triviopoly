@@ -10,7 +10,7 @@ public class GamePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private ScoreboardPanel scoreboard;
-	private WheelPanel wheel;
+	private SpinPanel wheel;
 	private JeopardyPanel jeopardyBoard;
 
 	public GamePanel() {
@@ -32,7 +32,7 @@ public class GamePanel extends JPanel {
 		c.weightx = 1;
 		c.weighty = 3;
 		c.gridwidth = 1;
-		wheel = new WheelPanel();
+		wheel = new SpinPanel();
 		add(wheel, c);
 		c.gridx = 1;
 		c.gridy = 1;
