@@ -18,6 +18,9 @@ public class SpinPanel extends JPanel {
 		c.gridx = 0;
 		c.gridy = 0;
 		add(new WheelPanel(), c);
+		c.gridx = 1;
+		add(new ImagePanel("images/arrow_scaled.png"), c);
+		c.gridx = 0;
 		c.gridy = 1;
 		add(new JButton("Spin!"), c);
 	}

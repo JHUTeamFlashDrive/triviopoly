@@ -30,7 +30,7 @@ public class GamePanel extends JPanel {
 		c.gridx = 0;
 		c.gridy = 1;
 		c.weightx = 1;
-		c.weighty = 3;
+		c.weighty = 5;
 		c.gridwidth = 1;
 		wheel = new SpinPanel();
 		add(wheel, c);

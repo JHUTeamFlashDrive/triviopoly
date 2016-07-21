@@ -11,6 +11,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.font.FontRenderContext;
@@ -50,6 +51,16 @@ public class WheelPanel extends JPanel implements ActionListener {
 	private AffineTransform viewTransform;
 	private double viewWidth;
 	private double viewHeight;
+	private double xTranslate;
+	private double yTranslate;
+	private double viewSize;
+
+	private GeneralPath[] sectors;
+	private Shape[] sectorTextShapes;
+	private Ellipse2D centerCircle;
+	private Stroke sectorStroke = new BasicStroke(2.0f);
+	private Stroke textStroke = new BasicStroke(1.0f);
+	private Stroke centerCircleStroke = new BasicStroke(2.0f);
 
 	public WheelPanel() {
 		setPreferredSize(new Dimension(450, 450));
@@ -58,13 +69,12 @@ public class WheelPanel extends JPanel implements ActionListener {
 		timer.start();
 	}
 
-	private void computeCoordinateSpaceTransformations() {
+	private void createViewTransformation() {
 		viewWidth = getWidth();
 		viewHeight = getHeight();
-		double viewRatio = viewWidth / viewHeight;
-		double scale;
-		double xTranslate = viewWidth / 2;
-		double yTranslate = viewHeight / 2;
+		xTranslate = viewWidth / 2;
+		yTranslate = viewHeight / 2;
+		viewSize = Math.min(viewWidth, viewWidth);
 
 		// heightScale negative to flip view over x axis. In a swing panel
 		// positive values go down and to the right. We want normal axis
@@ -72,7 +82,7 @@ public class WheelPanel extends JPanel implements ActionListener {
 		viewTransform = new AffineTransform(1, 0, 0, -1, xTranslate, yTranslate);
 	}
 
-	private void spin() {
+	public void spin() {
 		spinTime = (new Random().nextDouble() * 10);
 		currentTime = 0;
 		state = States.SPINNING;
@@ -86,28 +96,22 @@ public class WheelPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (state == States.SPINNING) {
-			if (currentTime >= spinTime) {
-				state = States.STOPPED;
-			} else {
-
-			}
-		}
+		// if (state == States.SPINNING) {
+		// if (currentTime >= spinTime) {
+		// state = States.STOPPED;
+		// } else {
+		//
+		// }
+		// }
+		wheelAngle += PI / 1024;
 
 		repaint();
 	}
 
-	private void doDrawing(Graphics2D g) {
-		if (getWidth() != viewWidth || getHeight() != viewHeight) {
-			computeCoordinateSpaceTransformations();
-		}
-		g.setTransform(viewTransform);
-
-		// g.draw(wheel);
-
+	private void createWheelShapes() {
 		double a = PI / 12;
-		double outerRadius = viewWidth / 2 - 2;
-		double innerRadius = viewWidth / 8;
+		double outerRadius = viewSize / 2 - 2;
+		double innerRadius = viewSize / 8;
 		double textRadius = innerRadius + 10;
 		double x[] = new double[6];
 		double y[] = new double[6];
@@ -126,6 +130,8 @@ public class WheelPanel extends JPanel implements ActionListener {
 		x[5] = cos(a) * innerRadius;
 		y[5] = sin(a) * innerRadius;
 
+		sectors = new GeneralPath[12];
+		sectorTextShapes = new Shape[12];
 		for (int i = 0; i < 12; i++) {
 			double angle = (double) i * PI / 6.0d;
 			double[] sectorX = rotateX(x, y, angle);
@@ -137,17 +143,13 @@ public class WheelPanel extends JPanel implements ActionListener {
 					sectorX[4], sectorY[4]);
 			sector.lineTo(sectorX[5], sectorY[5]);
 			sector.closePath();
-			g.setStroke(new BasicStroke(2));
-			g.setColor(SECTOR_COLORS[i]);
-			g.fill(sector);
-			g.setColor(Color.BLACK);
-			g.draw(sector);
+			sectors[i] = sector;
 
 			TextLayout sectorText = new TextLayout(SECTOR_NAMES[i], new Font(
 					"Helvetica", 1, 24), new FontRenderContext(null, false,
 					false));
-			double textAngle = angle + PI / 72;
-			double textWidthR = (double) sectorText.getBounds().getWidth();
+			double textAngle = angle;
+			double textWidthR = (double) sectorText.getBounds().getWidth() / 2;
 			double textHeightR = (double) sectorText.getBounds().getHeight() / 2;
 			double m00 = cos(textAngle);
 			double m10 = sin(textAngle);
@@ -161,20 +163,52 @@ public class WheelPanel extends JPanel implements ActionListener {
 					* sin(textAngle);
 			AffineTransform textTransform = new AffineTransform(m00, m10, m01,
 					m11, m02, m12);
-			Shape textShape = sectorText.getOutline(textTransform);
-			g.fill(textShape);
-			g.setColor(Color.WHITE);
-			g.setStroke(new BasicStroke(1.0f));
-			g.draw(textShape);
+			sectorTextShapes[i] = sectorText.getOutline(textTransform);
 		}
 
-		Ellipse2D innerCircle = new Ellipse2D.Double(-innerRadius,
-				-innerRadius, innerRadius * 2, innerRadius * 2);
-		g.setStroke(new BasicStroke(2.0f));
+		centerCircle = new Ellipse2D.Double(-innerRadius, -innerRadius,
+				innerRadius * 2, innerRadius * 2);
+	}
+
+	private void drawWheelShapes(Graphics2D g) {
+		for (int i = 0; i < 12; i++) {
+			g.setStroke(sectorStroke);
+			g.setColor(SECTOR_COLORS[i]);
+			g.fill(sectors[i]);
+			g.setColor(Color.BLACK);
+			g.draw(sectors[i]);
+
+			g.fill(sectorTextShapes[i]);
+			g.setColor(Color.WHITE);
+			g.setStroke(textStroke);
+			g.draw(sectorTextShapes[i]);
+		}
+
+		g.setStroke(centerCircleStroke);
 		g.setColor(Color.GREEN);
-		g.fill(innerCircle);
+		g.fill(centerCircle);
 		g.setColor(Color.BLACK);
-		g.draw(innerCircle);
+		g.draw(centerCircle);
+	}
+
+	private void updateViewTransform(Graphics2D g) {
+		double m00 = cos(wheelAngle);
+		double m10 = sin(wheelAngle);
+		double m01 = sin(wheelAngle);
+		double m11 = -cos(wheelAngle);
+		double m02 = xTranslate;
+		double m12 = yTranslate;
+		viewTransform.setTransform(m00, m10, m01, m11, m02, m12);
+		g.setTransform(viewTransform);
+	}
+
+	private void doDrawing(Graphics2D g) {
+		if (getWidth() != viewWidth || getHeight() != viewHeight) {
+			createViewTransformation();
+			createWheelShapes();
+		}
+		updateViewTransform(g);
+		drawWheelShapes(g);
 	}
 
 	double[] rotateX(double[] x, double[] y, double angle) {
