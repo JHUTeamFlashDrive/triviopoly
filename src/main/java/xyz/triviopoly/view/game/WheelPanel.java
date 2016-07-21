@@ -27,6 +27,8 @@ import javax.swing.Timer;
 public class WheelPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
+	private static WheelPanel instance;
+
 	private static Color[] SECTOR_COLORS = { Color.YELLOW, Color.BLUE,
 			Color.RED, Color.GREEN, Color.MAGENTA, Color.CYAN,
 			Color.LIGHT_GRAY, Color.PINK, Color.ORANGE, Color.GRAY,
@@ -62,11 +64,18 @@ public class WheelPanel extends JPanel implements ActionListener {
 	private Stroke textStroke = new BasicStroke(1.0f);
 	private Stroke centerCircleStroke = new BasicStroke(2.0f);
 
-	public WheelPanel() {
+	private WheelPanel() {
 		setPreferredSize(new Dimension(450, 450));
 		setBackground(Color.WHITE);
 		timer = new Timer(20, this);
 		timer.start();
+	}
+
+	public static WheelPanel getInstance() {
+		if (instance == null) {
+			instance = new WheelPanel();
+		}
+		return instance;
 	}
 
 	private void createViewTransformation() {

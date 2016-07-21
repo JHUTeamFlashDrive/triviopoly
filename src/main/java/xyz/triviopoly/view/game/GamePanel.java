@@ -10,10 +10,6 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private ScoreboardPanel scoreboard;
-	private SpinPanel wheel;
-	private JeopardyPanel jeopardyBoard;
-
 	public GamePanel() {
 		setLayout(new GridBagLayout());
 		setBackground(Color.WHITE);
@@ -27,19 +23,16 @@ public class GamePanel extends JPanel {
 		c.weightx = 2;
 		c.weighty = 1;
 		c.gridwidth = 2;
-		scoreboard = new ScoreboardPanel();
-		add(scoreboard, c);
+		add(ScoreboardPanel.getInstance(), c);
 		c.gridx = 0;
 		c.gridy = 1;
 		c.weightx = 1;
 		c.weighty = 5;
 		c.gridwidth = 1;
-		wheel = new SpinPanel();
-		add(wheel, c);
+		add(SpinPanel.getInstance(), c);
 		c.gridx = 1;
 		c.gridy = 1;
 		c.weightx = 5;
-		jeopardyBoard = new JeopardyPanel();
-		add(jeopardyBoard, c);
+		add(JeopardyPanel.getInstance(), c);
 	}
 }

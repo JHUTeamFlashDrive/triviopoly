@@ -11,9 +11,11 @@ import javax.swing.JPanel;
 public class ScoreboardPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
+	private static ScoreboardPanel instance;
+
 	private JLabel[] playerScores;
 
-	public ScoreboardPanel() {
+	private ScoreboardPanel() {
 		setLayout(new GridBagLayout());
 		setBackground(Color.WHITE);
 
@@ -39,6 +41,13 @@ public class ScoreboardPanel extends JPanel {
 			playerScores[i] = new JLabel("0");
 			add(playerScores[i], c);
 		}
+	}
+
+	public static ScoreboardPanel getInstance() {
+		if (instance == null) {
+			instance = new ScoreboardPanel();
+		}
+		return instance;
 	}
 
 }

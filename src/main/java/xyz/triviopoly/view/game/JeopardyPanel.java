@@ -13,10 +13,12 @@ import javax.swing.SwingConstants;
 public class JeopardyPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
+	private static JeopardyPanel instance;
+
 	private JLabel[] categories;
 	private JLabel[][] questions;
 
-	public JeopardyPanel() {
+	private JeopardyPanel() {
 		setLayout(new GridBagLayout());
 		setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
 		GridBagConstraints c = new GridBagConstraints();
@@ -71,6 +73,13 @@ public class JeopardyPanel extends JPanel {
 				add(questions[i][j], c);
 			}
 		}
+	}
+
+	public static JeopardyPanel getInstance() {
+		if (instance == null) {
+			instance = new JeopardyPanel();
+		}
+		return instance;
 	}
 
 }
