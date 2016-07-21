@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.font.FontRenderContext;
@@ -32,8 +33,8 @@ public class WheelPanel extends JPanel implements ActionListener {
 
 	private static String[] SECTOR_NAMES = { "Category 1", "Free Spin",
 			"Category 2", "Lose Spin", "Category 3", "Spin Again",
-			"Category 4", "Bankrupt", "Category 5", "Player Choice",
-			"Category 6", "Opponent Choice" };
+			"Category 4", "Bankrupt", "Category 5", "Choice", "Category 6",
+			"Opp. Choice" };
 
 	private enum States {
 		SPINNING, STOPPED
@@ -51,7 +52,7 @@ public class WheelPanel extends JPanel implements ActionListener {
 	private double viewHeight;
 
 	public WheelPanel() {
-		setPreferredSize(new Dimension(400, 400));
+		setPreferredSize(new Dimension(450, 450));
 		setBackground(Color.WHITE);
 		timer = new Timer(20, this);
 		timer.start();
@@ -101,12 +102,13 @@ public class WheelPanel extends JPanel implements ActionListener {
 			computeCoordinateSpaceTransformations();
 		}
 		g.setTransform(viewTransform);
-		g.setStroke(new BasicStroke(2));
+
 		// g.draw(wheel);
 
 		double a = PI / 12;
-		double innerRadius = 50;
-		double outerRadius = 198;
+		double outerRadius = viewWidth / 2 - 2;
+		double innerRadius = viewWidth / 8;
+		double textRadius = innerRadius + 10;
 		double x[] = new double[6];
 		double y[] = new double[6];
 		x[0] = cos(a) * innerRadius;
@@ -125,8 +127,9 @@ public class WheelPanel extends JPanel implements ActionListener {
 		y[5] = sin(a) * innerRadius;
 
 		for (int i = 0; i < 12; i++) {
-			double[] sectorX = rotateX(x, y, i * PI / 6);
-			double[] sectorY = rotateY(x, y, i * PI / 6);
+			double angle = (double) i * PI / 6.0d;
+			double[] sectorX = rotateX(x, y, angle);
+			double[] sectorY = rotateY(x, y, angle);
 			GeneralPath sector = new GeneralPath();
 			sector.moveTo(sectorX[0], sectorY[0]);
 			sector.lineTo(sectorX[1], sectorY[1]);
@@ -134,77 +137,44 @@ public class WheelPanel extends JPanel implements ActionListener {
 					sectorX[4], sectorY[4]);
 			sector.lineTo(sectorX[5], sectorY[5]);
 			sector.closePath();
+			g.setStroke(new BasicStroke(2));
 			g.setColor(SECTOR_COLORS[i]);
 			g.fill(sector);
 			g.setColor(Color.BLACK);
 			g.draw(sector);
+
+			TextLayout sectorText = new TextLayout(SECTOR_NAMES[i], new Font(
+					"Helvetica", 1, 24), new FontRenderContext(null, false,
+					false));
+			double textAngle = angle + PI / 72;
+			double textWidthR = (double) sectorText.getBounds().getWidth();
+			double textHeightR = (double) sectorText.getBounds().getHeight() / 2;
+			double m00 = cos(textAngle);
+			double m10 = sin(textAngle);
+			double m01 = sin(textAngle);
+			double m11 = -cos(textAngle);
+			double m02 = -textWidthR * cos(textAngle) + textHeightR
+					* sin(textAngle) + (textRadius + textWidthR)
+					* cos(textAngle);
+			double m12 = -textWidthR * sin(textAngle) - textHeightR
+					* cos(textAngle) + (textRadius + textWidthR)
+					* sin(textAngle);
+			AffineTransform textTransform = new AffineTransform(m00, m10, m01,
+					m11, m02, m12);
+			Shape textShape = sectorText.getOutline(textTransform);
+			g.fill(textShape);
+			g.setColor(Color.WHITE);
+			g.setStroke(new BasicStroke(1.0f));
+			g.draw(textShape);
 		}
 
 		Ellipse2D innerCircle = new Ellipse2D.Double(-innerRadius,
 				-innerRadius, innerRadius * 2, innerRadius * 2);
+		g.setStroke(new BasicStroke(2.0f));
 		g.setColor(Color.GREEN);
 		g.fill(innerCircle);
 		g.setColor(Color.BLACK);
 		g.draw(innerCircle);
-
-		TextLayout testText = new TextLayout("Test Text", new Font("Helvetica",
-				1, 48), new FontRenderContext(null, false, false));
-		AffineTransform textAt = new AffineTransform();
-		textAt.translate(0, (float) testText.getBounds().getHeight());
-		g.draw(testText.getOutline(textAt));
-		// double h = 198;
-		// double x1 = cos(a) * h;
-		// double y1 = -sin(a) * h;
-		// System.out.println("" + x1 + " " + y1);
-
-		// double lambda = a / 3 + Math.pow(a, 3) / 9 + Math.pow(a, 5) / 360;
-
-		// double mu = 1 + a * a / 6 + Math.pow(a, 4) / 72;
-		// double x2 = lambda * h;
-		// double y2 = -mu * h;
-		// double x3 = lambda * h;
-		// double y3 = mu * h;
-		// double x4 = cos(a) * h;
-		// double y4 = sin(a) * h;
-		// GeneralPath path = new GeneralPath();
-		// path.moveTo(x1, y1);
-		// path.lineTo(x2, y2);
-		// path.lineTo(x3, y3);
-		// path.lineTo(x4, y4);
-		// path.moveTo(0, 0);
-		// path.lineTo(x1, y1);
-		// path.curveTo(x3, y3, x2, y2, x4, y4);
-		// path.closePath();
-		// g.draw(path);
-
-		// for (int i = 0; i < 12; i++) {
-		// double x1 = Math.cos(i * Math.PI / 6);
-		// double y1 = Math.sin(i * Math.PI / 6);
-		// double x2 = Math.cos((i + 1) * Math.PI / 6);
-		// double y2 = Math.sin((i + 1) * Math.PI / 6);
-		// double x3 = Math.cos((2 * i + 1) * Math.PI / 12);
-		// double y3 = Math.sin((2 * i + 1) * Math.PI / 12);
-		// GeneralPath sector = new GeneralPath();
-		// sector.moveTo(x1 * 50, y1 * 50);
-		// sector.lineTo(x1 * 198, y1 * 198);
-		// sector.curveTo(x1 * 198, y1 * 198, x2 * 198, y2 * 198, x3 * 198,
-		// y3 * 198);
-		// sector.lineTo(x2 * 50, y2 * 50);
-		// sector.closePath();
-		// g.setColor(SECTOR_COLORS[i]);
-		// g.fill(sector);
-		// }
-		// for (int i = 0; i < 12; i++) {
-		// double x = Math.cos(i * Math.PI / 6);
-		// double y = Math.sin(i * Math.PI / 6);
-		// g.draw(new Line2D.Double(x * 50, y * 50, x * 198, y * 198));
-		// GeneralPath sector = new GeneralPath();
-		// sector.moveTo(x * 50, y * 50);
-		// sector.lineTo(x * 198, y * 198);
-		// sector.curveTo(x * 198, y1, x2, y2, x3, y3);
-		//
-		// }
-		// g.draw(new Ellipse2D.Double(-198, -198, 396, 396));
 	}
 
 	double[] rotateX(double[] x, double[] y, double angle) {
