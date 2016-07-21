@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
@@ -16,6 +17,7 @@ public class GamePanel extends JPanel {
 	public GamePanel() {
 		setLayout(new GridBagLayout());
 		setBackground(Color.WHITE);
+		setBorder(BorderFactory.createEmptyBorder(0, 25, 25, 25));
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;

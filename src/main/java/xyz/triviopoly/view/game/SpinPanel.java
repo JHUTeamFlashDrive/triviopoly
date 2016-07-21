@@ -1,9 +1,13 @@
 package xyz.triviopoly.view.game;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -22,7 +26,14 @@ public class SpinPanel extends JPanel {
 		add(new ImagePanel("images/arrow_scaled.png"), c);
 		c.gridx = 0;
 		c.gridy = 1;
-		add(new JButton("Spin!"), c);
+		c.insets = new Insets(20, 0, 0, 0);
+		JButton btnSpin = new JButton("Spin!");
+		btnSpin.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		btnSpin.setOpaque(true);
+		btnSpin.setBackground(Color.MAGENTA);
+		btnSpin.setFont(new Font("Helvetica", 1, 16));
+		btnSpin.setPreferredSize(new Dimension(100, 50));
+		add(btnSpin, c);
 	}
 
 }
