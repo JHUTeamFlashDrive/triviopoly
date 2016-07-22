@@ -24,20 +24,13 @@ import java.util.Random;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import xyz.triviopoly.controller.GameController;
+import xyz.triviopoly.model.Sector;
+
 public class WheelPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	private static WheelPanel instance;
-
-	private static Color[] SECTOR_COLORS = { Color.YELLOW, Color.BLUE,
-			Color.RED, Color.GREEN, Color.MAGENTA, Color.CYAN,
-			Color.LIGHT_GRAY, Color.PINK, Color.ORANGE, Color.GRAY,
-			Color.BLUE.brighter(), Color.GREEN.brighter() };
-
-	private static String[] SECTOR_NAMES = { "Category 1", "Free Spin",
-			"Category 2", "Lose Spin", "Category 3", "Spin Again",
-			"Category 4", "Bankrupt", "Category 5", "Choice", "Category 6",
-			"Opp. Choice" };
 
 	private enum States {
 		SPINNING, STOPPED
@@ -57,7 +50,7 @@ public class WheelPanel extends JPanel implements ActionListener {
 	private double yTranslate;
 	private double viewSize;
 
-	private GeneralPath[] sectors;
+	private GeneralPath[] sectorShapes;
 	private Shape[] sectorTextShapes;
 	private Ellipse2D centerCircle;
 	private Stroke sectorStroke = new BasicStroke(2.0f);
@@ -92,7 +85,7 @@ public class WheelPanel extends JPanel implements ActionListener {
 	}
 
 	public void spin() {
-		spinTime = 100 + new Random().nextInt(150);
+		spinTime = 10 + new Random().nextInt(20);
 		currentTime = 0;
 		state = States.SPINNING;
 	}
@@ -108,6 +101,8 @@ public class WheelPanel extends JPanel implements ActionListener {
 		if (state == States.SPINNING) {
 			if (currentTime >= spinTime) {
 				state = States.STOPPED;
+				Sector sector = calculateSector();
+				GameController.getInstance().spinResult(sector);
 			} else {
 				wheelAngle += PI / 64;
 				currentTime += 1;
@@ -117,34 +112,42 @@ public class WheelPanel extends JPanel implements ActionListener {
 		repaint();
 	}
 
+	private Sector calculateSector() {
+		double numberOfSectors = (wheelAngle + PI / 12) / (PI / 6);
+		double sectorNumber = numberOfSectors % 12.0d;
+		return Sector.valueOf((int) sectorNumber);
+	}
+
 	private void createWheelShapes() {
-		double a = PI / 12;
+		Sector[] sectors = Sector.values();
+		double angle = 2 * PI / (double) (sectors.length);
+		double halfA = angle / 2;
 		double outerRadius = viewSize / 2 - 2;
 		double innerRadius = viewSize / 8;
 		double textRadius = innerRadius + 10;
 		double x[] = new double[6];
 		double y[] = new double[6];
-		x[0] = cos(a) * innerRadius;
-		y[0] = -sin(a) * innerRadius;
-		x[1] = cos(a) * outerRadius;
-		y[1] = -sin(a) * outerRadius;
-		double lambda = (4 - cos(a)) / 3;
-		double mu = (1 - cos(a)) * (cos(a) - 3) / 3 / sin(a);
+		x[0] = cos(halfA) * innerRadius;
+		y[0] = -sin(halfA) * innerRadius;
+		x[1] = cos(halfA) * outerRadius;
+		y[1] = -sin(halfA) * outerRadius;
+		double lambda = (4 - cos(halfA)) / 3;
+		double mu = (1 - cos(halfA)) * (cos(halfA) - 3) / 3 / sin(halfA);
 		x[2] = lambda * outerRadius;
 		y[2] = mu * outerRadius;
 		x[3] = lambda * outerRadius;
 		y[3] = -mu * outerRadius;
-		x[4] = cos(a) * outerRadius;
-		y[4] = sin(a) * outerRadius;
-		x[5] = cos(a) * innerRadius;
-		y[5] = sin(a) * innerRadius;
+		x[4] = cos(halfA) * outerRadius;
+		y[4] = sin(halfA) * outerRadius;
+		x[5] = cos(halfA) * innerRadius;
+		y[5] = sin(halfA) * innerRadius;
 
-		sectors = new GeneralPath[12];
-		sectorTextShapes = new Shape[12];
-		for (int i = 0; i < 12; i++) {
-			double angle = (double) i * PI / 6.0d;
-			double[] sectorX = rotateX(x, y, angle);
-			double[] sectorY = rotateY(x, y, angle);
+		sectorShapes = new GeneralPath[sectors.length];
+		sectorTextShapes = new Shape[sectors.length];
+		for (int i = 0; i < sectors.length; i++) {
+			double sectorA = (double) i * angle;
+			double[] sectorX = rotateX(x, y, sectorA);
+			double[] sectorY = rotateY(x, y, sectorA);
 			GeneralPath sector = new GeneralPath();
 			sector.moveTo(sectorX[0], sectorY[0]);
 			sector.lineTo(sectorX[1], sectorY[1]);
@@ -152,24 +155,21 @@ public class WheelPanel extends JPanel implements ActionListener {
 					sectorX[4], sectorY[4]);
 			sector.lineTo(sectorX[5], sectorY[5]);
 			sector.closePath();
-			sectors[i] = sector;
+			sectorShapes[i] = sector;
 
-			TextLayout sectorText = new TextLayout(SECTOR_NAMES[i], new Font(
-					"Helvetica", 1, 24), new FontRenderContext(null, false,
-					false));
-			double textAngle = angle;
+			TextLayout sectorText = new TextLayout(sectors[i].wheelText(),
+					new Font("Helvetica", 1, 24), new FontRenderContext(null,
+							false, false));
 			double textWidthR = (double) sectorText.getBounds().getWidth() / 2;
 			double textHeightR = (double) sectorText.getBounds().getHeight() / 2;
-			double m00 = cos(textAngle);
-			double m10 = sin(textAngle);
-			double m01 = sin(textAngle);
-			double m11 = -cos(textAngle);
-			double m02 = -textWidthR * cos(textAngle) + textHeightR
-					* sin(textAngle) + (textRadius + textWidthR)
-					* cos(textAngle);
-			double m12 = -textWidthR * sin(textAngle) - textHeightR
-					* cos(textAngle) + (textRadius + textWidthR)
-					* sin(textAngle);
+			double m00 = cos(sectorA);
+			double m10 = sin(sectorA);
+			double m01 = sin(sectorA);
+			double m11 = -cos(sectorA);
+			double m02 = -textWidthR * cos(sectorA) + textHeightR
+					* sin(sectorA) + (textRadius + textWidthR) * cos(sectorA);
+			double m12 = -textWidthR * sin(sectorA) - textHeightR
+					* cos(sectorA) + (textRadius + textWidthR) * sin(sectorA);
 			AffineTransform textTransform = new AffineTransform(m00, m10, m01,
 					m11, m02, m12);
 			sectorTextShapes[i] = sectorText.getOutline(textTransform);
@@ -180,12 +180,13 @@ public class WheelPanel extends JPanel implements ActionListener {
 	}
 
 	private void drawWheelShapes(Graphics2D g) {
-		for (int i = 0; i < 12; i++) {
+		Sector[] sectors = Sector.values();
+		for (int i = 0; i < sectors.length; i++) {
 			g.setStroke(sectorStroke);
-			g.setColor(SECTOR_COLORS[i]);
-			g.fill(sectors[i]);
+			g.setColor(sectors[i].wheelColor());
+			g.fill(sectorShapes[i]);
 			g.setColor(Color.BLACK);
-			g.draw(sectors[i]);
+			g.draw(sectorShapes[i]);
 
 			g.fill(sectorTextShapes[i]);
 			g.setColor(Color.WHITE);

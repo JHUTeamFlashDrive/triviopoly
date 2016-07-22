@@ -1,17 +1,15 @@
 package xyz.triviopoly.controller;
 
+import xyz.triviopoly.model.Sector;
 import xyz.triviopoly.view.game.WheelPanel;
 
 public class GameController {
-	private static GameController instance;
+	private static GameController instance = new GameController();
 
 	private GameController() {
 	}
 
 	public static GameController getInstance() {
-		if (instance == null) {
-			instance = new GameController();
-		}
 		return instance;
 	}
 
@@ -19,4 +17,21 @@ public class GameController {
 		WheelPanel.getInstance().spin();
 	}
 
+	public void spinResult(Sector sector) {
+		if (sector.categorySector()) {
+			// handle category
+		} else if (sector == Sector.FREE_SPIN) {
+
+		} else if (sector == Sector.LOSE_SPIN) {
+
+		} else if (sector == Sector.SPIN_AGAIN) {
+
+		} else if (sector == Sector.BANKRUPT) {
+
+		} else if (sector == Sector.PLAYERS_CHOICE) {
+
+		} else if (sector == Sector.OPPONENTS_CHOICE) {
+
+		}
+	}
 }
