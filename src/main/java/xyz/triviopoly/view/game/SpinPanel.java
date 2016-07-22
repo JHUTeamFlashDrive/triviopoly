@@ -6,10 +6,14 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import xyz.triviopoly.controller.GameController;
 
 public class SpinPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -35,6 +39,14 @@ public class SpinPanel extends JPanel {
 		btnSpin.setBackground(Color.MAGENTA);
 		btnSpin.setFont(new Font("Helvetica", 1, 16));
 		btnSpin.setPreferredSize(new Dimension(100, 50));
+		btnSpin.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				GameController.getInstance().spin();
+			}
+
+		});
 		add(btnSpin, c);
 	}
 

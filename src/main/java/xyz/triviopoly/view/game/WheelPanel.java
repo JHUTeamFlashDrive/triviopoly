@@ -45,8 +45,8 @@ public class WheelPanel extends JPanel implements ActionListener {
 
 	private States state;
 
-	private double spinTime;
-	private double currentTime;
+	private int spinTime;
+	private int currentTime;
 	private double wheelAngle;
 
 	private Timer timer;
@@ -92,7 +92,7 @@ public class WheelPanel extends JPanel implements ActionListener {
 	}
 
 	public void spin() {
-		spinTime = (new Random().nextDouble() * 10);
+		spinTime = 100 + new Random().nextInt(150);
 		currentTime = 0;
 		state = States.SPINNING;
 	}
@@ -105,14 +105,14 @@ public class WheelPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// if (state == States.SPINNING) {
-		// if (currentTime >= spinTime) {
-		// state = States.STOPPED;
-		// } else {
-		//
-		// }
-		// }
-		wheelAngle += PI / 1024;
+		if (state == States.SPINNING) {
+			if (currentTime >= spinTime) {
+				state = States.STOPPED;
+			} else {
+				wheelAngle += PI / 64;
+				currentTime += 1;
+			}
+		}
 
 		repaint();
 	}
