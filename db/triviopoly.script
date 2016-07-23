@@ -1,0 +1,121 @@
+SET DATABASE UNIQUE NAME HSQLDB5618C4BADB
+SET DATABASE GC 0
+SET DATABASE DEFAULT RESULT MEMORY ROWS 0
+SET DATABASE EVENT LOG LEVEL 0
+SET DATABASE TRANSACTION CONTROL LOCKS
+SET DATABASE DEFAULT ISOLATION LEVEL READ COMMITTED
+SET DATABASE TRANSACTION ROLLBACK ON CONFLICT TRUE
+SET DATABASE TEXT TABLE DEFAULTS ''
+SET DATABASE SQL NAMES FALSE
+SET DATABASE SQL REFERENCES FALSE
+SET DATABASE SQL SIZE TRUE
+SET DATABASE SQL TYPES FALSE
+SET DATABASE SQL TDC DELETE TRUE
+SET DATABASE SQL TDC UPDATE TRUE
+SET DATABASE SQL TRANSLATE TTI TYPES TRUE
+SET DATABASE SQL TRANSLATE TTI TYPES TRUE
+SET DATABASE SQL CONCAT NULLS TRUE
+SET DATABASE SQL UNIQUE NULLS TRUE
+SET DATABASE SQL CONVERT TRUNCATE TRUE
+SET DATABASE SQL AVG SCALE 0
+SET DATABASE SQL DOUBLE NAN TRUE
+SET FILES WRITE DELAY 500 MILLIS
+SET FILES BACKUP INCREMENT TRUE
+SET FILES CACHE SIZE 10000
+SET FILES CACHE ROWS 50000
+SET FILES SCALE 32
+SET FILES LOB SCALE 32
+SET FILES DEFRAG 0
+SET FILES NIO TRUE
+SET FILES NIO SIZE 256
+SET FILES LOG TRUE
+SET FILES LOG SIZE 50
+CREATE USER SA PASSWORD DIGEST 'd41d8cd98f00b204e9800998ecf8427e'
+ALTER USER SA SET LOCAL TRUE
+CREATE SCHEMA PUBLIC AUTHORIZATION DBA
+SET SCHEMA PUBLIC
+CREATE MEMORY TABLE PUBLIC.CATEGORIES(CATEGORY_ID INTEGER NOT NULL,CATEGORY_NAME VARCHAR(250) NOT NULL,CONSTRAINT CATEGORIES_PK PRIMARY KEY(CATEGORY_ID))
+CREATE MEMORY TABLE PUBLIC.QUESTIONS(CATEGORY_ID INTEGER NOT NULL,QUESTION VARCHAR(1000) NOT NULL,QUESTION_TYPE VARCHAR(250) NOT NULL,ANSWER VARCHAR(1000) NOT NULL,DIFFICULTY INTEGER NOT NULL,CONSTRAINT QUESTIONS_CATEGORIES_FK FOREIGN KEY(CATEGORY_ID) REFERENCES PUBLIC.CATEGORIES(CATEGORY_ID),CONSTRAINT DIFFICULTY_CHK CHECK((PUBLIC.QUESTIONS.DIFFICULTY>0) AND (PUBLIC.QUESTIONS.DIFFICULTY<6)))
+ALTER SEQUENCE SYSTEM_LOBS.LOB_ID RESTART WITH 1
+SET DATABASE DEFAULT INITIAL SCHEMA PUBLIC
+GRANT USAGE ON DOMAIN INFORMATION_SCHEMA.SQL_IDENTIFIER TO PUBLIC
+GRANT USAGE ON DOMAIN INFORMATION_SCHEMA.YES_OR_NO TO PUBLIC
+GRANT USAGE ON DOMAIN INFORMATION_SCHEMA.TIME_STAMP TO PUBLIC
+GRANT USAGE ON DOMAIN INFORMATION_SCHEMA.CARDINAL_NUMBER TO PUBLIC
+GRANT USAGE ON DOMAIN INFORMATION_SCHEMA.CHARACTER_DATA TO PUBLIC
+GRANT DBA TO SA
+SET SCHEMA SYSTEM_LOBS
+INSERT INTO BLOCKS VALUES(0,2147483647,0)
+SET SCHEMA PUBLIC
+INSERT INTO CATEGORIES VALUES(1,'U.S. States')
+INSERT INTO CATEGORIES VALUES(2,'U.S. States2')
+INSERT INTO CATEGORIES VALUES(3,'U.S. States3')
+INSERT INTO CATEGORIES VALUES(4,'U.S. States4')
+INSERT INTO CATEGORIES VALUES(5,'U.S. States5')
+INSERT INTO CATEGORIES VALUES(6,'U.S. States6')
+INSERT INTO CATEGORIES VALUES(7,'U.S. States7')
+INSERT INTO CATEGORIES VALUES(8,'U.S. States8')
+INSERT INTO CATEGORIES VALUES(9,'U.S. States9')
+INSERT INTO CATEGORIES VALUES(10,'U.S. States10')
+INSERT INTO CATEGORIES VALUES(11,'U.S. States11')
+INSERT INTO CATEGORIES VALUES(12,'U.S. States12')
+INSERT INTO QUESTIONS VALUES(1,'This state''s capital is known as the sailing capital of the world.','What is','maryland',1)
+INSERT INTO QUESTIONS VALUES(1,'This state is known as the golden state.','What is','california',2)
+INSERT INTO QUESTIONS VALUES(1,'This state is home to the oldest continuously held horse race in the country.','What is','kentucky',3)
+INSERT INTO QUESTIONS VALUES(1,'At 11,239 feet, Mount Hood stands as the tallest peak of this state','What is','oregon',4)
+INSERT INTO QUESTIONS VALUES(1,'This state''s name is the only one to start with two vowels','What is','iowa',5)
+INSERT INTO QUESTIONS VALUES(2,'This state''s capital is known as the sailing capital of the world.','What is','maryland',1)
+INSERT INTO QUESTIONS VALUES(2,'This state is known as the golden state.','What is','california',2)
+INSERT INTO QUESTIONS VALUES(2,'This state is home to the oldest continuously held horse race in the country.','What is','kentucky',3)
+INSERT INTO QUESTIONS VALUES(2,'At 11,239 feet, Mount Hood stands as the tallest peak of this state','What is','oregon',4)
+INSERT INTO QUESTIONS VALUES(2,'This state''s name is the only one to start with two vowels','What is','iowa',5)
+INSERT INTO QUESTIONS VALUES(3,'This state''s capital is known as the sailing capital of the world.','What is','maryland',1)
+INSERT INTO QUESTIONS VALUES(3,'This state is known as the golden state.','What is','california',2)
+INSERT INTO QUESTIONS VALUES(3,'This state is home to the oldest continuously held horse race in the country.','What is','kentucky',3)
+INSERT INTO QUESTIONS VALUES(3,'At 11,239 feet, Mount Hood stands as the tallest peak of this state','What is','oregon',4)
+INSERT INTO QUESTIONS VALUES(3,'This state''s name is the only one to start with two vowels','What is','iowa',5)
+INSERT INTO QUESTIONS VALUES(4,'This state''s capital is known as the sailing capital of the world.','What is','maryland',1)
+INSERT INTO QUESTIONS VALUES(4,'This state is known as the golden state.','What is','california',2)
+INSERT INTO QUESTIONS VALUES(4,'This state is home to the oldest continuously held horse race in the country.','What is','kentucky',3)
+INSERT INTO QUESTIONS VALUES(4,'At 11,239 feet, Mount Hood stands as the tallest peak of this state','What is','oregon',4)
+INSERT INTO QUESTIONS VALUES(4,'This state''s name is the only one to start with two vowels','What is','iowa',5)
+INSERT INTO QUESTIONS VALUES(5,'This state''s capital is known as the sailing capital of the world.','What is','maryland',1)
+INSERT INTO QUESTIONS VALUES(5,'This state is known as the golden state.','What is','california',2)
+INSERT INTO QUESTIONS VALUES(5,'This state is home to the oldest continuously held horse race in the country.','What is','kentucky',3)
+INSERT INTO QUESTIONS VALUES(5,'At 11,239 feet, Mount Hood stands as the tallest peak of this state','What is','oregon',4)
+INSERT INTO QUESTIONS VALUES(5,'This state''s name is the only one to start with two vowels','What is','iowa',5)
+INSERT INTO QUESTIONS VALUES(6,'This state''s capital is known as the sailing capital of the world.','What is','maryland',1)
+INSERT INTO QUESTIONS VALUES(6,'This state is known as the golden state.','What is','california',2)
+INSERT INTO QUESTIONS VALUES(6,'This state is home to the oldest continuously held horse race in the country.','What is','kentucky',3)
+INSERT INTO QUESTIONS VALUES(6,'At 11,239 feet, Mount Hood stands as the tallest peak of this state','What is','oregon',4)
+INSERT INTO QUESTIONS VALUES(6,'This state''s name is the only one to start with two vowels','What is','iowa',5)
+INSERT INTO QUESTIONS VALUES(7,'This state''s capital is known as the sailing capital of the world.','What is','maryland',1)
+INSERT INTO QUESTIONS VALUES(7,'This state is known as the golden state.','What is','california',2)
+INSERT INTO QUESTIONS VALUES(7,'This state is home to the oldest continuously held horse race in the country.','What is','kentucky',3)
+INSERT INTO QUESTIONS VALUES(7,'At 11,239 feet, Mount Hood stands as the tallest peak of this state','What is','oregon',4)
+INSERT INTO QUESTIONS VALUES(7,'This state''s name is the only one to start with two vowels','What is','iowa',5)
+INSERT INTO QUESTIONS VALUES(8,'This state''s capital is known as the sailing capital of the world.','What is','maryland',1)
+INSERT INTO QUESTIONS VALUES(8,'This state is known as the golden state.','What is','california',2)
+INSERT INTO QUESTIONS VALUES(8,'This state is home to the oldest continuously held horse race in the country.','What is','kentucky',3)
+INSERT INTO QUESTIONS VALUES(8,'At 11,239 feet, Mount Hood stands as the tallest peak of this state','What is','oregon',4)
+INSERT INTO QUESTIONS VALUES(8,'This state''s name is the only one to start with two vowels','What is','iowa',5)
+INSERT INTO QUESTIONS VALUES(9,'This state''s capital is known as the sailing capital of the world.','What is','maryland',1)
+INSERT INTO QUESTIONS VALUES(9,'This state is known as the golden state.','What is','california',2)
+INSERT INTO QUESTIONS VALUES(9,'This state is home to the oldest continuously held horse race in the country.','What is','kentucky',3)
+INSERT INTO QUESTIONS VALUES(9,'At 11,239 feet, Mount Hood stands as the tallest peak of this state','What is','oregon',4)
+INSERT INTO QUESTIONS VALUES(9,'This state''s name is the only one to start with two vowels','What is','iowa',5)
+INSERT INTO QUESTIONS VALUES(10,'This state''s capital is known as the sailing capital of the world.','What is','maryland',1)
+INSERT INTO QUESTIONS VALUES(10,'This state is known as the golden state.','What is','california',2)
+INSERT INTO QUESTIONS VALUES(10,'This state is home to the oldest continuously held horse race in the country.','What is','kentucky',3)
+INSERT INTO QUESTIONS VALUES(10,'At 11,239 feet, Mount Hood stands as the tallest peak of this state','What is','oregon',4)
+INSERT INTO QUESTIONS VALUES(10,'This state''s name is the only one to start with two vowels','What is','iowa',5)
+INSERT INTO QUESTIONS VALUES(11,'This state''s capital is known as the sailing capital of the world.','What is','maryland',1)
+INSERT INTO QUESTIONS VALUES(11,'This state is known as the golden state.','What is','california',2)
+INSERT INTO QUESTIONS VALUES(11,'This state is home to the oldest continuously held horse race in the country.','What is','kentucky',3)
+INSERT INTO QUESTIONS VALUES(11,'At 11,239 feet, Mount Hood stands as the tallest peak of this state','What is','oregon',4)
+INSERT INTO QUESTIONS VALUES(11,'This state''s name is the only one to start with two vowels','What is','iowa',5)
+INSERT INTO QUESTIONS VALUES(12,'This state''s capital is known as the sailing capital of the world.','What is','maryland',1)
+INSERT INTO QUESTIONS VALUES(12,'This state is known as the golden state.','What is','california',2)
+INSERT INTO QUESTIONS VALUES(12,'This state is home to the oldest continuously held horse race in the country.','What is','kentucky',3)
+INSERT INTO QUESTIONS VALUES(12,'At 11,239 feet, Mount Hood stands as the tallest peak of this state','What is','oregon',4)
+INSERT INTO QUESTIONS VALUES(12,'This state''s name is the only one to start with two vowels','What is','iowa',5)
