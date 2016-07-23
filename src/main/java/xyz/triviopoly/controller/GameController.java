@@ -1,6 +1,8 @@
 package xyz.triviopoly.controller;
 
 import xyz.triviopoly.model.Sector;
+import xyz.triviopoly.view.TriviopolyWindow;
+import xyz.triviopoly.view.game.GamePanel;
 import xyz.triviopoly.view.game.WheelPanel;
 
 public class GameController {
@@ -11,6 +13,12 @@ public class GameController {
 
 	public static GameController getInstance() {
 		return instance;
+	}
+
+	public void initialize() {
+		GamePanel gamePanel = GamePanel.getInstance();
+		TriviopolyWindow window = TriviopolyWindow.getInstance();
+		window.displayContentPanel(gamePanel);
 	}
 
 	public void spin() {

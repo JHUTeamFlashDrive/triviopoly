@@ -28,7 +28,7 @@ public class JeopardyPanel extends JPanel {
 		c.insets = new Insets(0, 0, 0, 0);
 		c.weightx = 1;
 		c.weighty = 4;
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 6; i++) {
 			c.gridx = i;
 			JLabel categoryNumber = new JLabel("" + (i + 1));
 			categoryNumber.setOpaque(true);
@@ -42,8 +42,8 @@ public class JeopardyPanel extends JPanel {
 		}
 		c.weighty = 8;
 		c.gridy = 1;
-		categories = new JLabel[5];
-		for (int i = 0; i < 5; i++) {
+		categories = new JLabel[6];
+		for (int i = 0; i < 6; i++) {
 			c.gridx = i;
 			categories[i] = new JLabel("Category " + (i + 1));
 			categories[i].setOpaque(true);
@@ -56,10 +56,10 @@ public class JeopardyPanel extends JPanel {
 			add(categories[i], c);
 		}
 		c.weighty = 16;
-		questions = new JLabel[5][5];
+		questions = new JLabel[5][6];
 		for (int i = 0; i < 5; i++) {
-			questions[i] = new JLabel[5];
-			for (int j = 0; j < 5; j++) {
+			questions[i] = new JLabel[6];
+			for (int j = 0; j < 6; j++) {
 				c.gridx = j;
 				c.gridy = i + 2;
 				questions[i][j] = new JLabel("$" + ((i + 1) * 100));

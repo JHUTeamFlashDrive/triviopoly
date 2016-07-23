@@ -10,7 +10,9 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	public GamePanel() {
+	private static GamePanel instance;
+
+	private GamePanel() {
 		setLayout(new GridBagLayout());
 		setBackground(Color.WHITE);
 		setBorder(BorderFactory.createEmptyBorder(0, 25, 25, 25));
@@ -34,5 +36,12 @@ public class GamePanel extends JPanel {
 		c.gridy = 1;
 		c.weightx = 5;
 		add(JeopardyPanel.getInstance(), c);
+	}
+
+	public static GamePanel getInstance() {
+		if (instance == null) {
+			instance = new GamePanel();
+		}
+		return instance;
 	}
 }
