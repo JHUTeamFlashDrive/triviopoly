@@ -6,6 +6,7 @@ public class Question {
 	private String questionType;
 	private String answer;
 	private int difficulty;
+	private boolean answered = false;
 
 	public Question(String question, String questionType, String answer,
 			int difficulty) {
@@ -31,4 +32,11 @@ public class Question {
 		return difficulty;
 	}
 
+	public boolean isAnswered() {
+		return answered;
+	}
+
+	public void setAnswered(boolean answered) {
+		this.answered = answered;
+	}
 }

@@ -50,6 +50,7 @@ public class OpeningController {
 			Player player = players.get(i);
 			player.setName(playerNames.get(i));
 		}
+		game.setCurrentPlayer(players.get(0));
 		GameController.getInstance().initialize();
 	}
 

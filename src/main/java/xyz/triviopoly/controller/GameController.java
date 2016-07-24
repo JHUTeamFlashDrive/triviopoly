@@ -1,12 +1,21 @@
 package xyz.triviopoly.controller;
 
+import java.util.List;
+
+import xyz.triviopoly.dao.CqadDao;
+import xyz.triviopoly.model.Category;
+import xyz.triviopoly.model.Game;
 import xyz.triviopoly.model.Sector;
 import xyz.triviopoly.view.TriviopolyWindow;
 import xyz.triviopoly.view.game.GamePanel;
+import xyz.triviopoly.view.game.JeopardyPanel;
+import xyz.triviopoly.view.game.ScoreboardPanel;
 import xyz.triviopoly.view.game.WheelPanel;
 
 public class GameController {
 	private static GameController instance = new GameController();
+
+	private Game game = Game.getInstance();
 
 	private GameController() {
 	}
@@ -16,6 +25,14 @@ public class GameController {
 	}
 
 	public void initialize() {
+		List<Category> categories = CqadDao.getInstance()
+				.getGameboardCategories(6, null);
+		game.setCategories(categories);
+
+		ScoreboardPanel.getInstance().initialize(game.getPlayers(),
+				game.getCurrentPlayer());
+		JeopardyPanel.getInstance().initialize(game.getRound(), categories);
+
 		GamePanel gamePanel = GamePanel.getInstance();
 		TriviopolyWindow window = TriviopolyWindow.getInstance();
 		window.displayContentPanel(gamePanel);

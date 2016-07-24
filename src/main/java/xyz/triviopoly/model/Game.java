@@ -8,9 +8,10 @@ public class Game {
 	private static Game instance = new Game();
 
 	private List<Player> players;
-	private int currentPlayersTurn;
-	private int round;
+	private Player currentPlayer;
+	private Round round = Round.SINGLE_JEOPARDY;
 	private int spinCount;
+	private List<Category> categories;
 
 	public static Game getInstance() {
 		return instance;
@@ -30,19 +31,19 @@ public class Game {
 		return players;
 	}
 
-	public int getCurrentPlayersTurn() {
-		return currentPlayersTurn;
+	public Player getCurrentPlayer() {
+		return currentPlayer;
 	}
 
-	public void setCurrentPlayersTurn(int currentPlayersTurn) {
-		this.currentPlayersTurn = currentPlayersTurn;
+	public void setCurrentPlayer(Player currentPlayer) {
+		this.currentPlayer = currentPlayer;
 	}
 
-	public int getRound() {
+	public Round getRound() {
 		return round;
 	}
 
-	public void setRound(int round) {
+	public void setRound(Round round) {
 		this.round = round;
 	}
 
@@ -52,5 +53,13 @@ public class Game {
 
 	public void setSpinCount(int spinCount) {
 		this.spinCount = spinCount;
+	}
+
+	public List<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
 	}
 }
