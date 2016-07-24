@@ -81,6 +81,14 @@ public class GameController {
 	}
 
 	public void answerGiven(String answer) {
+		boolean correct = answer.toLowerCase().equals(
+				game.getSelectedQuestion().getAnswer().toLowerCase());
+		QuestionPanel.getInstance().displayResult(correct);
+	}
 
+	public void questionFinished() {
+		GamePanel gamePanel = GamePanel.getInstance();
+		TriviopolyWindow window = TriviopolyWindow.getInstance();
+		window.displayContentPanel(gamePanel);
 	}
 }
