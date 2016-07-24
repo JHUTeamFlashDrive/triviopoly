@@ -16,6 +16,7 @@ import xyz.triviopoly.view.game.GamePanel;
 import xyz.triviopoly.view.game.JeopardyPanel;
 import xyz.triviopoly.view.game.LoseTurnPanel;
 import xyz.triviopoly.view.game.QuestionPanel;
+import xyz.triviopoly.view.game.RoundPanel;
 import xyz.triviopoly.view.game.ScoreboardPanel;
 import xyz.triviopoly.view.game.SpinAgainPanel;
 import xyz.triviopoly.view.game.WheelPanel;
@@ -37,6 +38,8 @@ public class GameController {
 				.getGameboardCategories(6, null);
 		game.setCategories(categories);
 
+		RoundPanel.getInstance().initialize(game.getRound(),
+				game.getSpinCount());
 		ScoreboardPanel.getInstance().initialize(game.getPlayers(),
 				game.getCurrentPlayer());
 		JeopardyPanel.getInstance().initialize(game.getRound(), categories);
@@ -59,8 +62,8 @@ public class GameController {
 				Question question = questions.get(i);
 				if (!question.isAnswered()) {
 					game.setSelectedQuestion(question);
-					JeopardyPanel.getInstance()
-							.selectQuestion(categoryIndex, i);
+					JeopardyPanel.getInstance().highlightQuestion(
+							categoryIndex, i);
 					break;
 				}
 			}
@@ -88,10 +91,9 @@ public class GameController {
 			BankruptPanel bankruptPanel = new BankruptPanel();
 			TriviopolyWindow.getInstance().displayContentPanel(bankruptPanel);
 			bankruptPanel.startNotification(1200);
-		} else if (sector == Sector.PLAYERS_CHOICE) {
-
-		} else if (sector == Sector.OPPONENTS_CHOICE) {
-
+		} else if (sector == Sector.PLAYERS_CHOICE
+				|| sector == Sector.OPPONENTS_CHOICE) {
+			JeopardyPanel.getInstance().selectCategory();
 		}
 	}
 
@@ -139,12 +141,26 @@ public class GameController {
 					.setFreeSpinCount(currentPlayer.getFreeSpinCount() - 1);
 		} else {
 			nextPlayersTurn();
-			ScoreboardPanel.getInstance().update(game.getPlayers(),
-					game.getCurrentPlayer());
 		}
+		ScoreboardPanel.getInstance().update(game.getPlayers(),
+				game.getCurrentPlayer());
 		GamePanel gamePanel = GamePanel.getInstance();
 		TriviopolyWindow window = TriviopolyWindow.getInstance();
 		window.displayContentPanel(gamePanel);
+	}
+
+	public void categorySelected(int categoryNumber) {
+		Category category = game.getCategories().get(categoryNumber);
+		List<Question> questions = category.getQuestions();
+		for (int i = 0; i < questions.size(); i++) {
+			Question question = questions.get(i);
+			if (!question.isAnswered()) {
+				game.setSelectedQuestion(question);
+				JeopardyPanel.getInstance()
+						.highlightQuestion(categoryNumber, i);
+				break;
+			}
+		}
 	}
 
 	private void nextPlayersTurn() {

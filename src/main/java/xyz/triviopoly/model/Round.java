@@ -2,8 +2,8 @@ package xyz.triviopoly.model;
 
 public enum Round {
 	// @formatter:off
-	SINGLE_TRIVIOPOLY("Single Triviopoly", 100, 50),
-	DOUBLE_TRIVIOPOLY("Double Triviopoly", 200, 50);
+	SINGLE_TRIVIOPOLY("Triviopoly!", 100, 50),
+	DOUBLE_TRIVIOPOLY("Double Triviopoly!", 200, 50);
 	// @formatter:on
 
 	private String fancyName;

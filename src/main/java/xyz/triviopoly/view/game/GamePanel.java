@@ -3,8 +3,8 @@ package xyz.triviopoly.view.game;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
@@ -15,7 +15,7 @@ public class GamePanel extends JPanel {
 	private GamePanel() {
 		setLayout(new GridBagLayout());
 		setBackground(Color.WHITE);
-		setBorder(BorderFactory.createEmptyBorder(0, 25, 25, 25));
+		// setBorder(BorderFactory.createEmptyBorder(0, 25, 25, 25));
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
@@ -25,16 +25,25 @@ public class GamePanel extends JPanel {
 		c.weightx = 2;
 		c.weighty = 1;
 		c.gridwidth = 2;
-		add(ScoreboardPanel.getInstance(), c);
+		add(RoundPanel.getInstance(), c);
 		c.gridx = 0;
 		c.gridy = 1;
+		c.weightx = 2;
+		c.weighty = 2;
+		c.gridwidth = 2;
+		c.insets = new Insets(10, 25, 10, 25);
+		add(ScoreboardPanel.getInstance(), c);
+		c.gridx = 0;
+		c.gridy = 2;
 		c.weightx = 1;
-		c.weighty = 5;
+		c.weighty = 10;
 		c.gridwidth = 1;
+		c.insets = new Insets(10, 25, 25, 10);
 		add(SpinPanel.getInstance(), c);
 		c.gridx = 1;
-		c.gridy = 1;
+		c.gridy = 2;
 		c.weightx = 5;
+		c.insets = new Insets(10, 10, 25, 25);
 		add(JeopardyPanel.getInstance(), c);
 	}
 

@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -26,17 +27,43 @@ public class JeopardyPanel extends JPanel implements ActionListener {
 
 	private static JeopardyPanel instance;
 
+	private enum State {
+		NORMAL, HIGHLIGHTING_QUESTION, SELECTING_CATEGORY
+	}
+
+	private State state = State.NORMAL;
+	private JButton[] btnCategoryNumbers;
 	private JLabel[] lblCategories;
 	private JLabel[][] lblQuestions;
 	private Timer timer;
 	private JLabel selectedQuestion;
-	private int selectionTick;
+	private int tick;
 
 	private JeopardyPanel() {
 		setLayout(new GridBagLayout());
 		setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
 		setBackground(Color.BLUE);
 		timer = new Timer(100, this);
+	}
+
+	private class CategoryPickedActionListener implements ActionListener {
+
+		private int categoryNumber;
+
+		public CategoryPickedActionListener(int categoryNumber) {
+			this.categoryNumber = categoryNumber;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (state == State.SELECTING_CATEGORY) {
+				state = State.NORMAL;
+				btnCategoryNumbers[(tick + 1) % btnCategoryNumbers.length]
+						.setBackground(Color.BLUE);
+				timer.stop();
+				GameController.getInstance().categorySelected(categoryNumber);
+			}
+		}
 	}
 
 	public void initialize(Round round, List<Category> categories) {
@@ -47,17 +74,20 @@ public class JeopardyPanel extends JPanel implements ActionListener {
 		c.insets = new Insets(0, 0, 0, 0);
 		c.weightx = 1;
 		c.weighty = 4;
+		btnCategoryNumbers = new JButton[categories.size()];
 		for (int i = 0; i < categories.size(); i++) {
 			c.gridx = i;
-			JLabel categoryNumber = new JLabel("" + (i + 1));
-			categoryNumber.setOpaque(true);
-			categoryNumber.setBorder(BorderFactory.createLineBorder(
+			btnCategoryNumbers[i] = new JButton("" + (i + 1));
+			btnCategoryNumbers[i].setOpaque(true);
+			btnCategoryNumbers[i].setBorder(BorderFactory.createLineBorder(
 					Color.GREEN, 3));
-			categoryNumber.setBackground(Color.BLUE);
-			categoryNumber.setForeground(Color.GREEN);
-			categoryNumber.setHorizontalAlignment(SwingConstants.CENTER);
-			categoryNumber.setVerticalAlignment(SwingConstants.CENTER);
-			add(categoryNumber, c);
+			btnCategoryNumbers[i].setBackground(Color.BLUE);
+			btnCategoryNumbers[i].setForeground(Color.GREEN);
+			btnCategoryNumbers[i].setHorizontalAlignment(SwingConstants.CENTER);
+			btnCategoryNumbers[i].setVerticalAlignment(SwingConstants.CENTER);
+			btnCategoryNumbers[i]
+					.addActionListener(new CategoryPickedActionListener(i));
+			add(btnCategoryNumbers[i], c);
 		}
 		c.weighty = 8;
 		c.gridy = 1;
@@ -99,25 +129,48 @@ public class JeopardyPanel extends JPanel implements ActionListener {
 		}
 	}
 
-	public void selectQuestion(int categoryNumber, int questionNumber) {
+	public void highlightQuestion(int categoryNumber, int questionNumber) {
 		selectedQuestion = lblQuestions[categoryNumber][questionNumber];
-		selectionTick = 0;
+		tick = 0;
+		state = State.HIGHLIGHTING_QUESTION;
+		timer.start();
+	}
+
+	public void selectCategory() {
+		tick = 0;
+		state = State.SELECTING_CATEGORY;
 		timer.start();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (selectionTick % 2 == 0) {
+		tick += 1;
+		if (state == State.HIGHLIGHTING_QUESTION) {
+			highlightSelectedQuestion();
+		} else if (state == State.SELECTING_CATEGORY) {
+			highlightCategories();
+		}
+	}
+
+	private void highlightCategories() {
+		int lastHighlightedCategory = tick % btnCategoryNumbers.length;
+		int highlightCategory = (tick + 1) % btnCategoryNumbers.length;
+		btnCategoryNumbers[lastHighlightedCategory].setBackground(Color.BLUE);
+		btnCategoryNumbers[highlightCategory].setBackground(Color.WHITE);
+	}
+
+	private void highlightSelectedQuestion() {
+		if (tick % 2 == 0) {
 			selectedQuestion.setBackground(Color.WHITE);
 		} else {
 			selectedQuestion.setBackground(Color.BLUE);
 		}
-		if (selectionTick >= SELECTION_NUMBER_OF_TICKS) {
+		if (tick >= SELECTION_NUMBER_OF_TICKS) {
 			selectedQuestion.setBackground(Color.BLUE);
 			timer.stop();
+			state = State.NORMAL;
 			GameController.getInstance().selectionFinished();
 		}
-		selectionTick += 1;
 	}
 
 	public static JeopardyPanel getInstance() {
