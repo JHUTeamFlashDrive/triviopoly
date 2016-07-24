@@ -3,7 +3,7 @@ package xyz.triviopoly.model;
 public enum Round {
 	// @formatter:off
 	SINGLE_TRIVIOPOLY("Single Triviopoly", 100, 50),
-	DOUBLE_JEOPARDY("Double Jeopardy", 200, 50);
+	DOUBLE_TRIVIOPOLY("Double Triviopoly", 200, 50);
 	// @formatter:on
 
 	private String fancyName;

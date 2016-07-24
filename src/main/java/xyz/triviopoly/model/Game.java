@@ -9,7 +9,7 @@ public class Game {
 
 	private List<Player> players;
 	private Player currentPlayer;
-	private Round round = Round.SINGLE_JEOPARDY;
+	private Round round = Round.SINGLE_TRIVIOPOLY;
 	private int spinCount;
 	private List<Category> categories;
 	private Question selectedQuestion;
