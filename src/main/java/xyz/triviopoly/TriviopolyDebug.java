@@ -15,6 +15,9 @@ public class TriviopolyDebug {
 		players.get(0).setName("Joe");
 		players.get(1).setName("Steve");
 		players.get(2).setName("Mary");
+		for (Player player : players) {
+			player.setFreeSpinCount(10);
+		}
 		game.setCurrentPlayer(players.get(0));
 		GameController.getInstance().initialize();
 	}

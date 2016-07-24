@@ -9,10 +9,12 @@ import xyz.triviopoly.model.Player;
 import xyz.triviopoly.model.Question;
 import xyz.triviopoly.model.Sector;
 import xyz.triviopoly.view.TriviopolyWindow;
+import xyz.triviopoly.view.game.AskUseFreeSpinPanel;
 import xyz.triviopoly.view.game.BankruptPanel;
 import xyz.triviopoly.view.game.FreeSpinPanel;
 import xyz.triviopoly.view.game.GamePanel;
 import xyz.triviopoly.view.game.JeopardyPanel;
+import xyz.triviopoly.view.game.LoseTurnPanel;
 import xyz.triviopoly.view.game.QuestionPanel;
 import xyz.triviopoly.view.game.ScoreboardPanel;
 import xyz.triviopoly.view.game.SpinAgainPanel;
@@ -69,8 +71,10 @@ public class GameController {
 			FreeSpinPanel freeSpinPanel = new FreeSpinPanel();
 			TriviopolyWindow.getInstance().displayContentPanel(freeSpinPanel);
 			freeSpinPanel.startNotification(1200);
-		} else if (sector == Sector.LOSE_SPIN) {
-
+		} else if (sector == Sector.LOSE_TURN) {
+			LoseTurnPanel loseTurnPanel = new LoseTurnPanel();
+			TriviopolyWindow.getInstance().displayContentPanel(loseTurnPanel);
+			loseTurnPanel.startNotification(1200);
 		} else if (sector == Sector.SPIN_AGAIN) {
 			SpinAgainPanel spinAgainPanel = new SpinAgainPanel();
 			TriviopolyWindow.getInstance().displayContentPanel(spinAgainPanel);
@@ -114,5 +118,44 @@ public class GameController {
 		GamePanel gamePanel = GamePanel.getInstance();
 		TriviopolyWindow window = TriviopolyWindow.getInstance();
 		window.displayContentPanel(gamePanel);
+	}
+
+	public void loseTurnNotificationFinished() {
+		Player currentPlayer = game.getCurrentPlayer();
+		if (currentPlayer.getFreeSpinCount() > 0) {
+			TriviopolyWindow window = TriviopolyWindow.getInstance();
+			window.displayContentPanel(new AskUseFreeSpinPanel());
+		} else {
+			nextPlayersTurn();
+			ScoreboardPanel.getInstance().update(game.getPlayers(),
+					game.getCurrentPlayer());
+		}
+	}
+
+	public void askUseFreeSpinResult(boolean useIt) {
+		if (useIt) {
+			Player currentPlayer = game.getCurrentPlayer();
+			currentPlayer
+					.setFreeSpinCount(currentPlayer.getFreeSpinCount() - 1);
+		} else {
+			nextPlayersTurn();
+			ScoreboardPanel.getInstance().update(game.getPlayers(),
+					game.getCurrentPlayer());
+		}
+		GamePanel gamePanel = GamePanel.getInstance();
+		TriviopolyWindow window = TriviopolyWindow.getInstance();
+		window.displayContentPanel(gamePanel);
+	}
+
+	private void nextPlayersTurn() {
+		List<Player> players = game.getPlayers();
+		for (int i = 0; i < players.size(); i++) {
+			Player player = players.get(i);
+			if (player.equals(game.getCurrentPlayer())) {
+				int currentPlayerIndex = (i + 1) % players.size();
+				game.setCurrentPlayer(players.get(currentPlayerIndex));
+				break;
+			}
+		}
 	}
 }
