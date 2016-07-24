@@ -12,6 +12,7 @@ public class Game {
 	private Round round = Round.SINGLE_JEOPARDY;
 	private int spinCount;
 	private List<Category> categories;
+	private Question selectedQuestion;
 
 	public static Game getInstance() {
 		return instance;
@@ -61,5 +62,13 @@ public class Game {
 
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
+	}
+
+	public Question getSelectedQuestion() {
+		return selectedQuestion;
+	}
+
+	public void setSelectedQuestion(Question selectedQuestion) {
+		this.selectedQuestion = selectedQuestion;
 	}
 }

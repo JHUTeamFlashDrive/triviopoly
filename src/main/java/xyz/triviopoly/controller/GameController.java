@@ -5,10 +5,12 @@ import java.util.List;
 import xyz.triviopoly.dao.CqadDao;
 import xyz.triviopoly.model.Category;
 import xyz.triviopoly.model.Game;
+import xyz.triviopoly.model.Question;
 import xyz.triviopoly.model.Sector;
 import xyz.triviopoly.view.TriviopolyWindow;
 import xyz.triviopoly.view.game.GamePanel;
 import xyz.triviopoly.view.game.JeopardyPanel;
+import xyz.triviopoly.view.game.QuestionPanel;
 import xyz.triviopoly.view.game.ScoreboardPanel;
 import xyz.triviopoly.view.game.WheelPanel;
 
@@ -44,7 +46,18 @@ public class GameController {
 
 	public void spinResult(Sector sector) {
 		if (sector.categorySector()) {
-			// handle category
+			int categoryIndex = sector.categoryNumber() - 1;
+			Category category = game.getCategories().get(categoryIndex);
+			List<Question> questions = category.getQuestions();
+			for (int i = 0; i < questions.size(); i++) {
+				Question question = questions.get(i);
+				if (!question.isAnswered()) {
+					game.setSelectedQuestion(question);
+					JeopardyPanel.getInstance()
+							.selectQuestion(categoryIndex, i);
+					break;
+				}
+			}
 		} else if (sector == Sector.FREE_SPIN) {
 
 		} else if (sector == Sector.LOSE_SPIN) {
@@ -58,5 +71,16 @@ public class GameController {
 		} else if (sector == Sector.OPPONENTS_CHOICE) {
 
 		}
+	}
+
+	public void selectionFinished() {
+		QuestionPanel questionPanel = QuestionPanel.getInstance();
+		TriviopolyWindow window = TriviopolyWindow.getInstance();
+		window.displayContentPanel(questionPanel);
+		questionPanel.setQuestion(game.getSelectedQuestion());
+	}
+
+	public void answerGiven(String answer) {
+
 	}
 }
