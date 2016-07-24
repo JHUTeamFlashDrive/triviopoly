@@ -5,13 +5,17 @@ import java.util.List;
 import xyz.triviopoly.dao.CqadDao;
 import xyz.triviopoly.model.Category;
 import xyz.triviopoly.model.Game;
+import xyz.triviopoly.model.Player;
 import xyz.triviopoly.model.Question;
 import xyz.triviopoly.model.Sector;
 import xyz.triviopoly.view.TriviopolyWindow;
+import xyz.triviopoly.view.game.BankruptPanel;
+import xyz.triviopoly.view.game.FreeSpinPanel;
 import xyz.triviopoly.view.game.GamePanel;
 import xyz.triviopoly.view.game.JeopardyPanel;
 import xyz.triviopoly.view.game.QuestionPanel;
 import xyz.triviopoly.view.game.ScoreboardPanel;
+import xyz.triviopoly.view.game.SpinAgainPanel;
 import xyz.triviopoly.view.game.WheelPanel;
 
 public class GameController {
@@ -59,13 +63,27 @@ public class GameController {
 				}
 			}
 		} else if (sector == Sector.FREE_SPIN) {
-
+			Player player = game.getCurrentPlayer();
+			player.setFreeSpinCount(player.getFreeSpinCount() + 1);
+			ScoreboardPanel.getInstance().update(game.getPlayers(), player);
+			FreeSpinPanel freeSpinPanel = new FreeSpinPanel();
+			TriviopolyWindow.getInstance().displayContentPanel(freeSpinPanel);
+			freeSpinPanel.startNotification(1200);
 		} else if (sector == Sector.LOSE_SPIN) {
 
 		} else if (sector == Sector.SPIN_AGAIN) {
-
+			SpinAgainPanel spinAgainPanel = new SpinAgainPanel();
+			TriviopolyWindow.getInstance().displayContentPanel(spinAgainPanel);
+			spinAgainPanel.startNotification(1200);
 		} else if (sector == Sector.BANKRUPT) {
-
+			Player player = game.getCurrentPlayer();
+			player.setTotalScore(player.getTotalScore()
+					- player.getRoundScore());
+			player.setRoundScore(0);
+			ScoreboardPanel.getInstance().update(game.getPlayers(), player);
+			BankruptPanel bankruptPanel = new BankruptPanel();
+			TriviopolyWindow.getInstance().displayContentPanel(bankruptPanel);
+			bankruptPanel.startNotification(1200);
 		} else if (sector == Sector.PLAYERS_CHOICE) {
 
 		} else if (sector == Sector.OPPONENTS_CHOICE) {
@@ -87,6 +105,12 @@ public class GameController {
 	}
 
 	public void questionFinished() {
+		GamePanel gamePanel = GamePanel.getInstance();
+		TriviopolyWindow window = TriviopolyWindow.getInstance();
+		window.displayContentPanel(gamePanel);
+	}
+
+	public void notificationFinished() {
 		GamePanel gamePanel = GamePanel.getInstance();
 		TriviopolyWindow window = TriviopolyWindow.getInstance();
 		window.displayContentPanel(gamePanel);

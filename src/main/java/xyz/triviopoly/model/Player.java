@@ -3,7 +3,8 @@ package xyz.triviopoly.model;
 public class Player {
 
 	private String name;
-	private int score;
+	private int roundScore;
+	private int totalScore;
 	private int freeSpinCount;
 
 	public String getName() {
@@ -14,12 +15,20 @@ public class Player {
 		this.name = name;
 	}
 
-	public int getScore() {
-		return score;
+	public int getRoundScore() {
+		return roundScore;
 	}
 
-	public void setScore(int score) {
-		this.score = score;
+	public void setRoundScore(int roundScore) {
+		this.roundScore = roundScore;
+	}
+
+	public int getTotalScore() {
+		return totalScore;
+	}
+
+	public void setTotalScore(int totalScore) {
+		this.totalScore = totalScore;
 	}
 
 	public int getFreeSpinCount() {

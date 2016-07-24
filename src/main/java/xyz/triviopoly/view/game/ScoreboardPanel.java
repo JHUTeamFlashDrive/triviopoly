@@ -54,7 +54,7 @@ public class ScoreboardPanel extends JPanel {
 			playerName.setFont(new Font("Helvetica", 1, 16));
 			add(playerName, c);
 			c.gridy = 1;
-			lblPlayerScores[i] = new JLabel("Score: " + player.getScore());
+			lblPlayerScores[i] = new JLabel("Score: " + player.getRoundScore());
 			lblPlayerScores[i].setFont(new Font("Helvetica", 1, 14));
 			add(lblPlayerScores[i], c);
 			c.gridx = i * 4 + 2;
@@ -80,6 +80,21 @@ public class ScoreboardPanel extends JPanel {
 			lblFreeSpinCounts[i] = new JLabel("" + player.getFreeSpinCount());
 			lblFreeSpinCounts[i].setFont(new Font("Helvetica", 1, 14));
 			add(lblFreeSpinCounts[i], c);
+		}
+	}
+
+	public void update(List<Player> players, Player currentPlayer) {
+		for (int i = 0; i < players.size(); i++) {
+			Player player = players.get(i);
+			if (player.equals(currentPlayer)) {
+				playerIcons[i].setBackground(Color.YELLOW);
+				lblPlayerTurns[i].setText("Your Turn!");
+			} else {
+				playerIcons[i].setBackground(Color.WHITE);
+				lblPlayerTurns[i].setText("");
+			}
+			lblPlayerScores[i].setText("Score: " + player.getRoundScore());
+			lblFreeSpinCounts[i].setText("" + player.getFreeSpinCount());
 		}
 	}
 

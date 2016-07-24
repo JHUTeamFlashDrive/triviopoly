@@ -4,10 +4,10 @@ import java.awt.Color;
 
 public enum Sector {
 	// @formatter:off
-	CATEGORY1(0, "Category 1", Color.YELLOW, true, 1),
-	FREE_SPIN(1, "Free Spin", Color.BLUE, false, -1),
-	CATEGORY2(2, "Category 2", Color.RED, true, 2),
-	LOSE_SPIN(3, "Lose Spin", Color.GREEN, false, -1),
+	CATEGORY1(0, "Category 1", Color.BLUE, true, 1),
+	FREE_SPIN(1, "Free Spin", Color.GREEN, false, -1),
+	CATEGORY2(2, "Category 2", Color.YELLOW, true, 2),
+	LOSE_SPIN(3, "Lose Spin", Color.RED, false, -1),
 	CATEGORY3(4, "Category 3", Color.MAGENTA, true, 3),
 	SPIN_AGAIN(5, "Spin Again", Color.CYAN, false, -1),
 	CATEGORY4(6, "Category 4", Color.LIGHT_GRAY, true, 4),
