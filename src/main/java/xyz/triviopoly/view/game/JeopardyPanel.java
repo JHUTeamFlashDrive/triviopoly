@@ -42,7 +42,7 @@ public class JeopardyPanel extends JPanel implements ActionListener {
 	private JeopardyPanel() {
 		setLayout(new GridBagLayout());
 		setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
-		setBackground(Color.BLUE);
+		setBackground(Color.GREEN);
 		timer = new Timer(100, this);
 	}
 
