@@ -6,7 +6,7 @@ import java.awt.Font;
 
 import javax.swing.JLabel;
 
-import xyz.triviopoly.controller.GameController;
+import xyz.triviopoly.controller.LoseTurnHandler;
 
 public class LoseTurnPanel extends NotificationPanel {
 	private static final long serialVersionUID = 1L;
@@ -26,7 +26,7 @@ public class LoseTurnPanel extends NotificationPanel {
 
 	@Override
 	protected void notificationFinished() {
-		GameController.getInstance().loseTurnNotificationFinished();
+		LoseTurnHandler.getInstance().notificationFinished();
 	}
 
 }

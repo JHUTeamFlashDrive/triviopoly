@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import xyz.triviopoly.controller.GameController;
+import xyz.triviopoly.controller.CategoryHandler;
 import xyz.triviopoly.model.Question;
 
 public class QuestionPanel extends JPanel {
@@ -74,7 +74,7 @@ public class QuestionPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				GameController.getInstance().answerGiven(txtAnswer.getText());
+				CategoryHandler.getInstance().answerGiven(txtAnswer.getText());
 			}
 
 		});
@@ -105,7 +105,7 @@ public class QuestionPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				GameController.getInstance().questionFinished();
+				CategoryHandler.getInstance().questionFinished();
 			}
 		});
 		okPanel.add(btnOk);
@@ -113,6 +113,8 @@ public class QuestionPanel extends JPanel {
 	}
 
 	public void setQuestion(Question question) {
+		lblQuestion.setFont(new Font("Comic Sans MS", Font.PLAIN, 64));
+		lblQuestion.setForeground(Color.WHITE);
 		lblQuestion.setText("<html><center>" + question.getQuestion()
 				+ "</center></html>");
 		lblQuestionType.setText(question.getQuestionType());
@@ -137,6 +139,7 @@ public class QuestionPanel extends JPanel {
 		txtAnswer.setVisible(false);
 		lblQuestionMark.setVisible(false);
 		btnOk.setVisible(true);
+		btnOk.requestFocusInWindow();
 	}
 
 	public static QuestionPanel getInstance() {

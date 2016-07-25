@@ -6,7 +6,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -63,7 +62,6 @@ public class OpeningPanel extends JPanel {
 		c.weighty = 1;
 		c.gridwidth = 3;
 		JPanel titlePanel = new JPanel();
-		titlePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 		titlePanel.setBackground(Color.WHITE);
 		JLabel lblTriviopoly = new JLabel("Triviopoly!");
 		lblTriviopoly.setFont(new Font("Arial", Font.BOLD, 96));
@@ -76,15 +74,12 @@ public class OpeningPanel extends JPanel {
 		c.weighty = 3;
 		c.gridwidth = 1;
 		JPanel leftSidePanel = new JPanel();
-		leftSidePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 		leftSidePanel.setBackground(Color.WHITE);
 		add(leftSidePanel, c);
 		c.gridx = 2;
 		c.gridy = 1;
 		c.weightx = 5;
 		JPanel rightSidePanel = new JPanel();
-		rightSidePanel
-				.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 		rightSidePanel.setBackground(Color.WHITE);
 		add(rightSidePanel, c);
 		c.gridx = 0;
@@ -93,7 +88,6 @@ public class OpeningPanel extends JPanel {
 		c.weighty = 2;
 		c.gridwidth = 3;
 		JPanel bottomPanel = new JPanel();
-		bottomPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 		bottomPanel.setBackground(Color.WHITE);
 		add(bottomPanel, c);
 	}

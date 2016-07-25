@@ -6,23 +6,23 @@ import xyz.triviopoly.dao.CqadDao;
 import xyz.triviopoly.model.Category;
 import xyz.triviopoly.model.Game;
 import xyz.triviopoly.model.Player;
-import xyz.triviopoly.model.Question;
+import xyz.triviopoly.model.Round;
 import xyz.triviopoly.model.Sector;
 import xyz.triviopoly.view.TriviopolyWindow;
 import xyz.triviopoly.view.game.AskUseFreeSpinPanel;
-import xyz.triviopoly.view.game.BankruptPanel;
-import xyz.triviopoly.view.game.FreeSpinPanel;
 import xyz.triviopoly.view.game.GamePanel;
 import xyz.triviopoly.view.game.JeopardyPanel;
-import xyz.triviopoly.view.game.LoseTurnPanel;
-import xyz.triviopoly.view.game.QuestionPanel;
 import xyz.triviopoly.view.game.RoundPanel;
 import xyz.triviopoly.view.game.ScoreboardPanel;
-import xyz.triviopoly.view.game.SpinAgainPanel;
 import xyz.triviopoly.view.game.WheelPanel;
 
 public class GameController {
 	private static GameController instance = new GameController();
+
+	private static SectorHandler[] sectorHandlers = {
+			CategoryHandler.getInstance(), FreeSpinHandler.getInstance(),
+			LoseTurnHandler.getInstance(), SpinAgainHandler.getInstance(),
+			BankruptHandler.getInstance(), ChoiceHandler.getInstance() };
 
 	private Game game = Game.getInstance();
 
@@ -54,111 +54,64 @@ public class GameController {
 	}
 
 	public void spinResult(Sector sector) {
-		if (sector.categorySector()) {
-			int categoryIndex = sector.categoryNumber() - 1;
-			Category category = game.getCategories().get(categoryIndex);
-			List<Question> questions = category.getQuestions();
-			for (int i = 0; i < questions.size(); i++) {
-				Question question = questions.get(i);
-				if (!question.isAnswered()) {
-					game.setSelectedQuestion(question);
-					JeopardyPanel.getInstance().highlightQuestion(
-							categoryIndex, i);
-					break;
-				}
+		for (SectorHandler sectorHandler : sectorHandlers) {
+			if (sectorHandler.handles(sector)) {
+				sectorHandler.handle(sector);
+				break;
 			}
-		} else if (sector == Sector.FREE_SPIN) {
-			Player player = game.getCurrentPlayer();
-			player.setFreeSpinCount(player.getFreeSpinCount() + 1);
-			ScoreboardPanel.getInstance().update(game.getPlayers(), player);
-			FreeSpinPanel freeSpinPanel = new FreeSpinPanel();
-			TriviopolyWindow.getInstance().displayContentPanel(freeSpinPanel);
-			freeSpinPanel.startNotification(1200);
-		} else if (sector == Sector.LOSE_TURN) {
-			LoseTurnPanel loseTurnPanel = new LoseTurnPanel();
-			TriviopolyWindow.getInstance().displayContentPanel(loseTurnPanel);
-			loseTurnPanel.startNotification(1200);
-		} else if (sector == Sector.SPIN_AGAIN) {
-			SpinAgainPanel spinAgainPanel = new SpinAgainPanel();
-			TriviopolyWindow.getInstance().displayContentPanel(spinAgainPanel);
-			spinAgainPanel.startNotification(1200);
-		} else if (sector == Sector.BANKRUPT) {
-			Player player = game.getCurrentPlayer();
-			player.setTotalScore(player.getTotalScore()
-					- player.getRoundScore());
-			player.setRoundScore(0);
-			ScoreboardPanel.getInstance().update(game.getPlayers(), player);
-			BankruptPanel bankruptPanel = new BankruptPanel();
-			TriviopolyWindow.getInstance().displayContentPanel(bankruptPanel);
-			bankruptPanel.startNotification(1200);
-		} else if (sector == Sector.PLAYERS_CHOICE
-				|| sector == Sector.OPPONENTS_CHOICE) {
-			JeopardyPanel.getInstance().selectCategory();
 		}
 	}
 
-	public void selectionFinished() {
-		QuestionPanel questionPanel = QuestionPanel.getInstance();
-		TriviopolyWindow window = TriviopolyWindow.getInstance();
-		window.displayContentPanel(questionPanel);
-		questionPanel.setQuestion(game.getSelectedQuestion());
-	}
-
-	public void answerGiven(String answer) {
-		boolean correct = answer.toLowerCase().equals(
-				game.getSelectedQuestion().getAnswer().toLowerCase());
-		QuestionPanel.getInstance().displayResult(correct);
-	}
-
-	public void questionFinished() {
-		GamePanel gamePanel = GamePanel.getInstance();
-		TriviopolyWindow window = TriviopolyWindow.getInstance();
-		window.displayContentPanel(gamePanel);
-	}
-
-	public void notificationFinished() {
-		GamePanel gamePanel = GamePanel.getInstance();
-		TriviopolyWindow window = TriviopolyWindow.getInstance();
-		window.displayContentPanel(gamePanel);
-	}
-
-	public void loseTurnNotificationFinished() {
+	public void checkFreeSpinToken() {
 		Player currentPlayer = game.getCurrentPlayer();
 		if (currentPlayer.getFreeSpinCount() > 0) {
 			TriviopolyWindow window = TriviopolyWindow.getInstance();
 			window.displayContentPanel(new AskUseFreeSpinPanel());
 		} else {
-			nextPlayersTurn();
-			ScoreboardPanel.getInstance().update(game.getPlayers(),
-					game.getCurrentPlayer());
+			spinFinished(true);
 		}
 	}
 
 	public void askUseFreeSpinResult(boolean useIt) {
+		boolean nextPlayersTurn;
 		if (useIt) {
 			Player currentPlayer = game.getCurrentPlayer();
 			currentPlayer
 					.setFreeSpinCount(currentPlayer.getFreeSpinCount() - 1);
+			nextPlayersTurn = false;
 		} else {
+			nextPlayersTurn = true;
+		}
+		spinFinished(nextPlayersTurn);
+	}
+
+	public void spinFinished(boolean nextPlayersTurn) {
+		if (nextPlayersTurn) {
 			nextPlayersTurn();
 		}
-		ScoreboardPanel.getInstance().update(game.getPlayers(),
-				game.getCurrentPlayer());
+		game.setSpinCount(game.getSpinCount() + 1);
+		if (game.getSpinCount() == game.getRound().spinLimit()) {
+			nextRound();
+		}
 		GamePanel gamePanel = GamePanel.getInstance();
 		TriviopolyWindow window = TriviopolyWindow.getInstance();
 		window.displayContentPanel(gamePanel);
+		JeopardyPanel.getInstance().update(game.getRound(),
+				game.getCategories());
+		ScoreboardPanel.getInstance().update(game.getPlayers(),
+				game.getCurrentPlayer());
+		RoundPanel.getInstance().update(game.getRound(), game.getSpinCount());
 	}
 
-	public void categorySelected(int categoryNumber) {
-		Category category = game.getCategories().get(categoryNumber);
-		List<Question> questions = category.getQuestions();
-		for (int i = 0; i < questions.size(); i++) {
-			Question question = questions.get(i);
-			if (!question.isAnswered()) {
-				game.setSelectedQuestion(question);
-				JeopardyPanel.getInstance()
-						.highlightQuestion(categoryNumber, i);
-				break;
+	private void nextRound() {
+		if (game.getRound() == Round.SINGLE_TRIVIOPOLY) {
+			game.setRound(Round.DOUBLE_TRIVIOPOLY);
+			game.setSpinCount(0);
+			List<Category> categories = CqadDao.getInstance()
+					.getGameboardCategories(6, game.getCategories());
+			game.setCategories(categories);
+			for (Player player : game.getPlayers()) {
+				player.setRoundScore(0);
 			}
 		}
 	}

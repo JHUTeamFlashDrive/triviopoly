@@ -53,6 +53,15 @@ public enum Sector {
 		return categoryNumber;
 	}
 
+	public static Sector category(int categoryNumber) {
+		for (Sector sector : values()) {
+			if (sector.categoryNumber() == categoryNumber) {
+				return sector;
+			}
+		}
+		throw new IllegalArgumentException("Not a valid category number");
+	}
+
 	public static Sector valueOf(int sectorNumber) {
 		for (Sector sector : values()) {
 			if (sector.sectorNumber() == sectorNumber) {

@@ -63,6 +63,10 @@ public class RoundPanel extends JPanel {
 				.setText("Spins Remaining in Round: " + spinsRemaining);
 	}
 
+	public void update(Round round, int spinCount) {
+		initialize(round, spinCount);
+	}
+
 	public static RoundPanel getInstance() {
 		if (instance == null) {
 			instance = new RoundPanel();

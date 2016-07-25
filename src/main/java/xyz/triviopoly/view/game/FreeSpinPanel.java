@@ -6,6 +6,8 @@ import java.awt.Font;
 
 import javax.swing.JLabel;
 
+import xyz.triviopoly.controller.FreeSpinHandler;
+
 public class FreeSpinPanel extends NotificationPanel {
 	private static final long serialVersionUID = 1L;
 
@@ -20,5 +22,10 @@ public class FreeSpinPanel extends NotificationPanel {
 		lblFreeSpin.setVerticalAlignment(JLabel.CENTER);
 		lblFreeSpin.setFont(new Font("Comic Sans MS", Font.BOLD, 192));
 		add(lblFreeSpin, BorderLayout.CENTER);
+	}
+
+	@Override
+	protected void notificationFinished() {
+		FreeSpinHandler.getInstance().notificationFinished();
 	}
 }

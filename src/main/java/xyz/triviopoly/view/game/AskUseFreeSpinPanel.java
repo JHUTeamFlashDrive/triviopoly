@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 
 import xyz.triviopoly.controller.GameController;
 
-public class AskUseFreeSpinPanel extends NotificationPanel {
+public class AskUseFreeSpinPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	public AskUseFreeSpinPanel() {

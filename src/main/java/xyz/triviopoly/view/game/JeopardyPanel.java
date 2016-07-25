@@ -15,7 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
-import xyz.triviopoly.controller.GameController;
+import xyz.triviopoly.controller.CategoryHandler;
+import xyz.triviopoly.controller.ChoiceHandler;
 import xyz.triviopoly.model.Category;
 import xyz.triviopoly.model.Question;
 import xyz.triviopoly.model.Round;
@@ -61,7 +62,7 @@ public class JeopardyPanel extends JPanel implements ActionListener {
 				btnCategoryNumbers[(tick + 1) % btnCategoryNumbers.length]
 						.setBackground(Color.BLUE);
 				timer.stop();
-				GameController.getInstance().categorySelected(categoryNumber);
+				ChoiceHandler.getInstance().categorySelected(categoryNumber);
 			}
 		}
 	}
@@ -186,7 +187,7 @@ public class JeopardyPanel extends JPanel implements ActionListener {
 			selectedQuestion.setBackground(Color.BLUE);
 			timer.stop();
 			state = State.NORMAL;
-			GameController.getInstance().selectionFinished();
+			CategoryHandler.getInstance().questionHighlightFinished();
 		}
 	}
 

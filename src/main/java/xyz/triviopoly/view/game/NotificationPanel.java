@@ -6,8 +6,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import xyz.triviopoly.controller.GameController;
-
 public abstract class NotificationPanel extends JPanel implements
 		ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -37,7 +35,5 @@ public abstract class NotificationPanel extends JPanel implements
 		}
 	}
 
-	protected void notificationFinished() {
-		GameController.getInstance().notificationFinished();
-	}
+	protected abstract void notificationFinished();
 }

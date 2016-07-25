@@ -85,7 +85,7 @@ public class WheelPanel extends JPanel implements ActionListener {
 	}
 
 	public void spin() {
-		spinTime = 99 + new Random().nextInt(1);
+		spinTime = 100 + new Random().nextInt(100);
 		currentTime = 0;
 		state = States.SPINNING;
 	}
