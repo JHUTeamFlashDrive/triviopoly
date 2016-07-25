@@ -34,9 +34,17 @@ public class ScoreboardPanel extends JPanel {
 		lblPlayerScores = new JLabel[players.size()];
 		lblPlayerTurns = new JLabel[players.size()];
 		lblFreeSpinCounts = new JLabel[players.size()];
+		c.gridx = 0;
+		c.gridy = 0;
+		c.gridheight = 2;
+		c.weightx = 1;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		JPanel fillerPanel = new JPanel();
+		fillerPanel.setBackground(Color.WHITE);
+		add(fillerPanel, c);
 		for (int i = 0; i < players.size(); i++) {
 			Player player = players.get(i);
-			c.gridx = i * 4;
+			c.gridx = i * 5 + 1;
 			c.gridy = 0;
 			c.gridheight = 2;
 			c.weightx = 0;
@@ -47,7 +55,7 @@ public class ScoreboardPanel extends JPanel {
 				playerIcons[i].setBackground(Color.YELLOW);
 			}
 			add(playerIcons[i], c);
-			c.gridx = i * 4 + 1;
+			c.gridx = i * 5 + 2;
 			c.gridheight = 1;
 			c.insets = new Insets(0, 20, 0, 0);
 			JLabel playerName = new JLabel(player.getName());
@@ -57,10 +65,8 @@ public class ScoreboardPanel extends JPanel {
 			lblPlayerScores[i] = new JLabel("Score: " + player.getRoundScore());
 			lblPlayerScores[i].setFont(new Font("Helvetica", 1, 14));
 			add(lblPlayerScores[i], c);
-			c.gridx = i * 4 + 2;
+			c.gridx = i * 5 + 3;
 			c.gridy = 0;
-			c.weightx = 1;
-			c.fill = GridBagConstraints.HORIZONTAL;
 			c.gridwidth = 2;
 			lblPlayerTurns[i] = new JLabel();
 			lblPlayerTurns[i].setForeground(Color.RED);
@@ -69,17 +75,21 @@ public class ScoreboardPanel extends JPanel {
 			}
 			add(lblPlayerTurns[i], c);
 			c.gridy = 1;
-			c.weightx = 0;
-			c.fill = GridBagConstraints.NONE;
 			c.gridwidth = 1;
 			add(new ImagePanel("images/free_spin.png", 0.1), c);
-			c.gridx = i * 4 + 3;
-			c.weightx = 1;
+			c.gridx = i * 5 + 4;
 			c.insets = new Insets(0, 10, 0, 0);
-			c.fill = GridBagConstraints.HORIZONTAL;
 			lblFreeSpinCounts[i] = new JLabel("" + player.getFreeSpinCount());
 			lblFreeSpinCounts[i].setFont(new Font("Helvetica", 1, 14));
 			add(lblFreeSpinCounts[i], c);
+			c.gridx = i * 5 + 5;
+			c.gridy = 0;
+			c.gridheight = 2;
+			c.weightx = 1;
+			c.fill = GridBagConstraints.HORIZONTAL;
+			fillerPanel = new JPanel();
+			fillerPanel.setBackground(Color.WHITE);
+			add(fillerPanel, c);
 		}
 	}
 
