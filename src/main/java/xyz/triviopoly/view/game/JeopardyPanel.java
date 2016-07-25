@@ -129,6 +129,23 @@ public class JeopardyPanel extends JPanel implements ActionListener {
 		}
 	}
 
+	public void update(Round round, List<Category> categories) {
+		for (int i = 0; i < categories.size(); i++) {
+			Category category = categories.get(i);
+			List<Question> questions = category.getQuestions();
+			for (int j = 0; j < questions.size(); j++) {
+				Question question = questions.get(j);
+				if (question.isAnswered()) {
+					lblQuestions[i][j].setText("");
+				} else {
+					lblQuestions[i][j].setText("$"
+							+ (question.getDifficulty() * round
+									.dollarMultiplier()));
+				}
+			}
+		}
+	}
+
 	public void highlightQuestion(int categoryNumber, int questionNumber) {
 		selectedQuestion = lblQuestions[categoryNumber][questionNumber];
 		tick = 0;
