@@ -1,6 +1,8 @@
 package xyz.triviopoly.view.opening;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,30 +11,30 @@ import java.awt.Insets;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import xyz.triviopoly.view.game.ImagePanel;
+
 public class OpeningPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private static OpeningPanel instance;
 
-	private GridBagConstraints contentPanelConstraints;
+	private JPanel contentPanelContainer;
 	private JPanel contentPanel;
+	private GridBagConstraints contentPanelConstraints;
 
 	private OpeningPanel() {
 		setLayout(new GridBagLayout());
 		setBackground(Color.WHITE);
 
-		createFillerPanels();
+		createPanels();
 
 		contentPanelConstraints = new GridBagConstraints();
-		contentPanelConstraints.insets = new Insets(0, 0, 0, 0);
 		contentPanelConstraints.fill = GridBagConstraints.BOTH;
-		contentPanelConstraints.gridx = 1;
-		contentPanelConstraints.gridy = 1;
-		contentPanelConstraints.weightx = 1;
-		contentPanelConstraints.weighty = 3;
+		contentPanelConstraints.gridx = 0;
+		contentPanelConstraints.gridy = 0;
 		contentPanel = new JPanel();
 		contentPanel.setBackground(Color.WHITE);
-		add(contentPanel, contentPanelConstraints);
+		contentPanelContainer.add(contentPanel, contentPanelConstraints);
 
 	}
 
@@ -44,22 +46,20 @@ public class OpeningPanel extends JPanel {
 	}
 
 	public void displayContentPanel(JPanel contentPanel) {
-		remove(this.contentPanel);
+		contentPanelContainer.remove(this.contentPanel);
 		this.contentPanel = contentPanel;
-		add(this.contentPanel, contentPanelConstraints);
+		contentPanelContainer.add(this.contentPanel, contentPanelConstraints);
 		revalidate();
 		repaint();
 	}
 
-	private void createFillerPanels() {
+	private void createPanels() {
 		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
-
 		c.gridx = 0;
 		c.gridy = 0;
-		c.insets = new Insets(0, 40, 0, 0);
+		c.insets = new Insets(40, 40, 0, 0);
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
-		c.weighty = 1;
 		c.gridwidth = 3;
 		JPanel titlePanel = new JPanel();
 		titlePanel.setBackground(Color.WHITE);
@@ -69,24 +69,44 @@ public class OpeningPanel extends JPanel {
 		add(lblTriviopoly, c);
 		c.gridx = 0;
 		c.gridy = 1;
+		c.fill = GridBagConstraints.VERTICAL;
 		c.insets = new Insets(0, 0, 0, 0);
-		c.weightx = 1;
-		c.weighty = 3;
+		c.weightx = 0;
+		c.weighty = 5;
+		c.gridheight = 2;
 		c.gridwidth = 1;
 		JPanel leftSidePanel = new JPanel();
+		leftSidePanel.setPreferredSize(new Dimension(20, 20));
 		leftSidePanel.setBackground(Color.WHITE);
 		add(leftSidePanel, c);
+		c.gridx = 1;
+		c.gridy = 1;
+		c.fill = GridBagConstraints.NONE;
+		c.weightx = 0;
+		c.weighty = 0;
+		c.gridheight = 1;
+		contentPanelContainer = new JPanel();
+		contentPanelContainer.setBackground(Color.WHITE);
+		contentPanelContainer.setPreferredSize(new Dimension(420, 420));
+		contentPanelContainer.setLayout(new GridBagLayout());
+		add(contentPanelContainer, c);
 		c.gridx = 2;
 		c.gridy = 1;
-		c.weightx = 5;
-		JPanel rightSidePanel = new JPanel();
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1;
+		c.weighty = 5;
+		c.gridheight = 2;
+		JPanel rightSidePanel = new JPanel(new BorderLayout());
 		rightSidePanel.setBackground(Color.WHITE);
+		ImagePanel image = new ImagePanel("images/opening_image.jpg");
+		rightSidePanel.add(image, BorderLayout.SOUTH);
 		add(rightSidePanel, c);
-		c.gridx = 0;
+		c.gridx = 1;
 		c.gridy = 2;
-		c.weightx = 15;
+		c.fill = GridBagConstraints.VERTICAL;
+		c.weightx = 0;
 		c.weighty = 2;
-		c.gridwidth = 3;
+		c.gridheight = 1;
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setBackground(Color.WHITE);
 		add(bottomPanel, c);

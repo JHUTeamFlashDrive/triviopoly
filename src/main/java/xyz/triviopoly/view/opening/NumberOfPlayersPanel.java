@@ -29,7 +29,7 @@ public class NumberOfPlayersPanel extends JPanel {
 		c.insets = new Insets(5, 5, 5, 5);
 		c.gridx = 0;
 		c.gridy = 0;
-		JLabel lblHowManyPlayers = new JLabel("How many players? (1-4)");
+		JLabel lblHowManyPlayers = new JLabel("How many players? (2-4)");
 		add(lblHowManyPlayers, c);
 		c.gridx = 1;
 		JTextField txtHowManyPlayers = new JTextField(5);

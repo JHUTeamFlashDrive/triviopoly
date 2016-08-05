@@ -43,6 +43,7 @@ public class GamePanel extends JPanel {
 		c.weightx = 1;
 		c.insets = new Insets(10, 10, 25, 25);
 		JPanel jeopardyContainer = new JPanel(new GridBagLayout());
+		jeopardyContainer.setBackground(Color.WHITE);
 		GridBagConstraints jc = new GridBagConstraints();
 		jeopardyContainer.add(JeopardyPanel.getInstance(), jc);
 		add(jeopardyContainer, c);
