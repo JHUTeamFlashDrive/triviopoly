@@ -3,6 +3,7 @@ package xyz.triviopoly.view.opening;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class PlayerNamesPanel extends JPanel {
 	public void update(int numberOfPlayers) {
 		GridBagConstraints c = new GridBagConstraints();
 		c.anchor = GridBagConstraints.LINE_END;
+		c.insets = new Insets(5, 5, 5, 5);
 
 		txtPlayerNames = new JTextField[numberOfPlayers];
 		for (int i = 0; i < numberOfPlayers; i++) {
