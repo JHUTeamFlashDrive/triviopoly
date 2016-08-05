@@ -13,8 +13,13 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 import xyz.triviopoly.controller.CategoryHandler;
 import xyz.triviopoly.controller.ChoiceHandler;
@@ -94,18 +99,19 @@ public class JeopardyPanel extends JPanel implements ActionListener {
 		}
 		c.weighty = 8;
 		c.gridy = 1;
+		c.anchor = GridBagConstraints.CENTER;
 		lblCategories = new JLabel[categories.size()];
 		for (int i = 0; i < categories.size(); i++) {
 			Category category = categories.get(i);
 			c.gridx = i;
-			lblCategories[i] = new JLabel(category.getName());
+			lblCategories[i] = new JLabel();
 			lblCategories[i].setOpaque(true);
 			lblCategories[i].setBorder(BorderFactory.createLineBorder(
 					Color.GREEN, 3));
 			lblCategories[i].setBackground(Color.BLUE);
 			lblCategories[i].setForeground(Color.GREEN);
-			lblCategories[i].setHorizontalAlignment(SwingConstants.CENTER);
-			lblCategories[i].setVerticalAlignment(SwingConstants.CENTER);
+			lblCategories[i].setText("<html><body style='width: 60px; text-align: center'>" + category.getName() + "</body></html>");
+			lblCategories[i].setHorizontalAlignment(JLabel.CENTER);
 			add(lblCategories[i], c);
 		}
 		c.weighty = 16;
