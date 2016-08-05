@@ -1,6 +1,7 @@
 package xyz.triviopoly.view.game;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -44,6 +45,7 @@ public class JeopardyPanel extends JPanel implements ActionListener {
 		setLayout(new GridBagLayout());
 		setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
 		setBackground(Color.GREEN);
+		setPreferredSize(new Dimension(630,546));
 		timer = new Timer(100, this);
 	}
 

@@ -15,7 +15,7 @@ public class TriviopolyWindow {
 		window = new JFrame();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setTitle("Triviopoly!");
-		window.setBounds(50, 50, 1200, 760);
+		window.setBounds(50, 50, 1200, 800);
 		window.setResizable(false);
 		window.setBackground(Color.WHITE);
 

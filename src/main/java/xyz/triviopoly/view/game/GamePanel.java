@@ -18,33 +18,34 @@ public class GamePanel extends JPanel {
 		// setBorder(BorderFactory.createEmptyBorder(0, 25, 25, 25));
 
 		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
+		c.fill = GridBagConstraints.HORIZONTAL;
 
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 2;
-		c.weighty = 1;
 		c.gridwidth = 2;
 		add(RoundPanel.getInstance(), c);
 		c.gridx = 0;
 		c.gridy = 1;
 		c.weightx = 2;
-		c.weighty = 2;
 		c.gridwidth = 2;
 		c.insets = new Insets(10, 25, 10, 25);
 		add(ScoreboardPanel.getInstance(), c);
+		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 0;
 		c.gridy = 2;
 		c.weightx = 1;
-		c.weighty = 10;
+		c.weighty = 1;
 		c.gridwidth = 1;
 		c.insets = new Insets(10, 25, 25, 10);
 		add(SpinPanel.getInstance(), c);
 		c.gridx = 1;
-		c.gridy = 2;
-		c.weightx = 5;
+		c.weightx = 1;
 		c.insets = new Insets(10, 10, 25, 25);
-		add(JeopardyPanel.getInstance(), c);
+		JPanel jeopardyContainer = new JPanel(new GridBagLayout());
+		GridBagConstraints jc = new GridBagConstraints();
+		jeopardyContainer.add(JeopardyPanel.getInstance(), jc);
+		add(jeopardyContainer, c);
 	}
 
 	public static GamePanel getInstance() {

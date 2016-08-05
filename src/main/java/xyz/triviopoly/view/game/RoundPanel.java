@@ -26,8 +26,7 @@ public class RoundPanel extends JPanel {
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
-		c.fill = GridBagConstraints.VERTICAL;
-		c.weighty = 1;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.insets = new Insets(10, 10, 5, 10);
 		c.anchor = GridBagConstraints.WEST;
 		lblRoundName = new JLabel("");
@@ -48,7 +47,6 @@ public class RoundPanel extends JPanel {
 		c.insets = new Insets(0, 0, 0, 0);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
-		c.weighty = 0;
 		JPanel lineBreakPanel = new JPanel();
 		lineBreakPanel.setBackground(Color.BLACK);
 		lineBreakPanel.setPreferredSize(new Dimension(200, 3));
