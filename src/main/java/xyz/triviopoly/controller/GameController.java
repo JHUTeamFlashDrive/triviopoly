@@ -10,6 +10,7 @@ import xyz.triviopoly.model.Round;
 import xyz.triviopoly.model.Sector;
 import xyz.triviopoly.view.TriviopolyWindow;
 import xyz.triviopoly.view.game.AskUseFreeSpinPanel;
+import xyz.triviopoly.view.game.FinalPanel;
 import xyz.triviopoly.view.game.GamePanel;
 import xyz.triviopoly.view.game.JeopardyPanel;
 import xyz.triviopoly.view.game.RoundPanel;
@@ -91,7 +92,12 @@ public class GameController {
 		}
 		game.setSpinCount(game.getSpinCount() + 1);
 		if (game.getSpinCount() == game.getRound().spinLimit()) {
-			nextRound();
+			if (game.getRound() == Round.SINGLE_TRIVIOPOLY) {
+				doubleTriviopoly();
+			} else {
+				finishGame();
+				return;
+			}
 		}
 		GamePanel gamePanel = GamePanel.getInstance();
 		TriviopolyWindow window = TriviopolyWindow.getInstance();
@@ -103,17 +109,20 @@ public class GameController {
 		RoundPanel.getInstance().update(game.getRound(), game.getSpinCount());
 	}
 
-	private void nextRound() {
-		if (game.getRound() == Round.SINGLE_TRIVIOPOLY) {
-			game.setRound(Round.DOUBLE_TRIVIOPOLY);
-			game.setSpinCount(0);
-			List<Category> categories = CqadDao.getInstance()
-					.getGameboardCategories(6, game.getCategories());
-			game.setCategories(categories);
-			for (Player player : game.getPlayers()) {
-				player.setRoundScore(0);
-			}
+	private void doubleTriviopoly() {
+		game.setRound(Round.DOUBLE_TRIVIOPOLY);
+		game.setSpinCount(0);
+		List<Category> categories = CqadDao.getInstance()
+				.getGameboardCategories(6, game.getCategories());
+		game.setCategories(categories);
+		for (Player player : game.getPlayers()) {
+			player.setRoundScore(0);
 		}
+	}
+
+	private void finishGame() {
+		TriviopolyWindow window = TriviopolyWindow.getInstance();
+		window.displayContentPanel(new FinalPanel(game.getPlayers()));
 	}
 
 	private void nextPlayersTurn() {
@@ -126,5 +135,9 @@ public class GameController {
 				break;
 			}
 		}
+	}
+
+	public void finalScoreDisplayFinished() {
+		OpeningController.getInstance().initialize();
 	}
 }

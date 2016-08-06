@@ -9,7 +9,7 @@ public class Game {
 
 	private List<Player> players;
 	private Player currentPlayer;
-	private Round round = Round.SINGLE_TRIVIOPOLY;
+	private Round round;
 	private int spinCount;
 	private List<Category> categories;
 	private Question selectedQuestion;
@@ -19,6 +19,16 @@ public class Game {
 	}
 
 	private Game() {
+		newGame();
+	}
+
+	public void newGame() {
+		players = null;
+		currentPlayer = null;
+		round = Round.SINGLE_TRIVIOPOLY;
+		spinCount = 0;
+		categories = null;
+		selectedQuestion = null;
 	}
 
 	public void setNumberOfPlayers(int numberOfPlayers) {

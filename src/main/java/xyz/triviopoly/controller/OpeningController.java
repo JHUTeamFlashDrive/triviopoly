@@ -33,6 +33,7 @@ public class OpeningController {
 	}
 
 	public void startGame() {
+		Game.getInstance().newGame();
 		OpeningPanel.getInstance().displayContentPanel(
 				NumberOfPlayersPanel.getInstance());
 	}

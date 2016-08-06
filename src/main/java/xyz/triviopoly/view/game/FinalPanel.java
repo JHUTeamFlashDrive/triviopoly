@@ -2,148 +2,107 @@ package xyz.triviopoly.view.game;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import xyz.triviopoly.controller.CategoryHandler;
-import xyz.triviopoly.model.Question;
+import xyz.triviopoly.controller.GameController;
+import xyz.triviopoly.model.Player;
 
 public class FinalPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private JLabel lblQuestionType;
-	private JTextField txtAnswer;
-	private JLabel lblQuestionMark;
 	private JButton btnOk;
 
-	public QuestionPanel(List<Players> players) {
+	public FinalPanel(List<Player> players) {
 		setLayout(new GridBagLayout());
 		setBackground(Color.BLUE);
 		setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+		players = rankPlayers(players);
+
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
-		c.insets = new Insets(0, 0, 0, 0);
-		c.weightx = 3;
-		c.weighty = 4;
+		c.insets = new Insets(0, 40, 10, 40);
 		c.gridwidth = 3;
 		c.anchor = GridBagConstraints.CENTER;
 		JLabel lblWinners = new JLabel("Winners!");
 		lblWinners.setBackground(Color.BLUE);
 		lblWinners.setForeground(Color.WHITE);
 		lblWinners.setHorizontalAlignment(SwingConstants.CENTER);
-		lblWinners.setFont(new Font("Comic Sans MS", Font.PLAIN, 64));
+		lblWinners.setFont(new Font("Comic Sans MS", Font.PLAIN, 128));
 		add(lblWinners, c);
-		c.gridy = 1;
-		c.weightx = 1;
-		c.weighty = 1;
+		c.insets = new Insets(8, 40, 10, 40);
 		c.gridwidth = 1;
-		lblQuestionType = new JLabel();
-		lblQuestionType.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblQuestionType.setBackground(Color.BLUE);
-		lblQuestionType.setForeground(Color.WHITE);
-		lblQuestionType.setFont(new Font("Comic Sans MS", Font.PLAIN, 32));
-		add(lblQuestionType, c);
-		c.gridx = 1;
-		c.insets = new Insets(0, 10, 0, 0);
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1;
-		txtAnswer = new JTextField(10);
-		txtAnswer.setCaretColor(Color.WHITE);
-		txtAnswer.setBackground(Color.BLUE);
-		txtAnswer.setForeground(Color.WHITE);
-		txtAnswer.setBorder(null);
-		txtAnswer.setFont(new Font("Comic Sans MS", Font.PLAIN, 32));
-		txtAnswer.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				CategoryHandler.getInstance().answerGiven(txtAnswer.getText());
-			}
-
-		});
-		add(txtAnswer, c);
-		c.gridx = 2;
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1;
-		lblQuestionMark = new JLabel("?");
-		lblQuestionMark.setBackground(Color.BLUE);
-		lblQuestionMark.setForeground(Color.WHITE);
-		lblQuestionMark.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
-		add(lblQuestionMark, c);
+		String[] ranks = { "1st", "2nd", "3rd", "4th" };
+		for (int i = 0; i < players.size(); i++) {
+			Player player = players.get(i);
+			c.gridx = 0;
+			c.gridy = i + 1;
+			JLabel lblRank = createLabel(ranks[i], 64);
+			add(lblRank, c);
+			c.gridx = 1;
+			JLabel lblPlayer = createLabel(player.getName(), 64);
+			add(lblPlayer, c);
+			c.gridx = 2;
+			JLabel lblScore = createLabel("" + player.getTotalScore(), 64);
+			add(lblScore, c);
+		}
 		c.gridx = 0;
-		c.gridy = 2;
+		c.gridy = 1 + players.size();
 		c.gridwidth = 3;
-		c.weightx = 3;
-		c.weighty = 1;
-		JPanel okPanel = new JPanel(new FlowLayout());
-		okPanel.setBackground(Color.BLUE);
 		btnOk = new JButton("OK");
 		btnOk.setBackground(Color.BLUE);
 		btnOk.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
 		btnOk.setForeground(Color.WHITE);
 		btnOk.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
-		btnOk.setVisible(false);
 		btnOk.setPreferredSize(new Dimension(200, 75));
 		btnOk.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				CategoryHandler.getInstance().questionFinished();
+				GameController.getInstance().finalScoreDisplayFinished();
 			}
+
 		});
-		okPanel.add(btnOk);
-		add(okPanel, c);
-	}
-
-	public void setQuestion(Question question) {
-		lblWinners.setFont(new Font("Comic Sans MS", Font.PLAIN, 64));
-		lblWinners.setForeground(Color.WHITE);
-		lblWinners.setText("<html><center>" + question.getQuestion()
-				+ "</center></html>");
-		lblQuestionType.setText(question.getQuestionType());
-		lblQuestionType.setVisible(true);
-		txtAnswer.setText("");
-		txtAnswer.setVisible(true);
-		txtAnswer.requestFocusInWindow();
-		lblQuestionMark.setVisible(true);
-		btnOk.setVisible(false);
-	}
-
-	public void displayResult(boolean correct) {
-		lblWinners.setFont(new Font("Comic Sans MS", Font.PLAIN, 128));
-		if (correct) {
-			lblWinners.setForeground(Color.GREEN);
-			lblWinners.setText("<html><center>CORRECT!</center></html>");
-		} else {
-			lblWinners.setForeground(Color.RED);
-			lblWinners.setText("<html><center>SORRY</center></html>");
-		}
-		lblQuestionType.setVisible(false);
-		txtAnswer.setVisible(false);
-		lblQuestionMark.setVisible(false);
-		btnOk.setVisible(true);
+		add(btnOk, c);
 		btnOk.requestFocusInWindow();
 	}
 
-	public static QuestionPanel getInstance() {
-		if (instance == null) {
-			instance = new QuestionPanel();
-		}
-		return instance;
+	private JLabel createLabel(String text, int fontSize) {
+		JLabel label = new JLabel(text);
+		label.setBackground(Color.BLUE);
+		label.setForeground(Color.WHITE);
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setFont(new Font("Comic Sans MS", Font.PLAIN, fontSize));
+		return label;
+	}
+
+	private List<Player> rankPlayers(List<Player> players) {
+		List<Player> rankedPlayers = new ArrayList<>(players);
+		rankedPlayers.sort(new Comparator<Player>() {
+
+			@Override
+			public int compare(Player o1, Player o2) {
+				return -((int) Math.signum(o1.getTotalScore()
+						- o2.getTotalScore()));
+			}
+
+		});
+		return rankedPlayers;
 	}
 
 }
