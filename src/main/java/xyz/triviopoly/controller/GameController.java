@@ -6,6 +6,7 @@ import xyz.triviopoly.dao.CqadDao;
 import xyz.triviopoly.model.Category;
 import xyz.triviopoly.model.Game;
 import xyz.triviopoly.model.Player;
+import xyz.triviopoly.model.Question;
 import xyz.triviopoly.model.Round;
 import xyz.triviopoly.model.Sector;
 import xyz.triviopoly.view.TriviopolyWindow;
@@ -91,7 +92,7 @@ public class GameController {
 			nextPlayersTurn();
 		}
 		game.setSpinCount(game.getSpinCount() + 1);
-		if (game.getSpinCount() == game.getRound().spinLimit()) {
+		if (game.getSpinCount() == game.getRound().spinLimit() || questionsAllAnswered()) {
 			if (game.getRound() == Round.SINGLE_TRIVIOPOLY) {
 				doubleTriviopoly();
 			} else {
@@ -107,6 +108,17 @@ public class GameController {
 		ScoreboardPanel.getInstance().update(game.getPlayers(),
 				game.getCurrentPlayer());
 		RoundPanel.getInstance().update(game.getRound(), game.getSpinCount());
+	}
+	
+	private boolean questionsAllAnswered() {
+		for(Category category : game.getCategories()) {
+			for(Question question : category.getQuestions()) {
+				if(!question.isAnswered()) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	private void doubleTriviopoly() {
