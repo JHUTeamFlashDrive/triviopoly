@@ -136,6 +136,7 @@ public class JeopardyPanel extends JPanel implements ActionListener {
 	public void update(Round round, List<Category> categories) {
 		for (int i = 0; i < categories.size(); i++) {
 			Category category = categories.get(i);
+			lblCategories[i].setText("<html><body style='width: 60px; text-align: center'>" + category.getName() + "</body></html>");
 			List<Question> questions = category.getQuestions();
 			for (int j = 0; j < questions.size(); j++) {
 				Question question = questions.get(j);

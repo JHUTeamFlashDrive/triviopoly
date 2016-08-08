@@ -19,6 +19,7 @@ public class TriviopolyDebug {
 			player.setFreeSpinCount(10);
 		}
 		game.setCurrentPlayer(players.get(0));
+		game.setSpinCount(48);
 		GameController.getInstance().initialize();
 	}
 
